@@ -15,7 +15,7 @@ public class Player : MonoBehaviour
         Health=MaxHeath;
     }
 
-    // Update is called once per frame
+    
     void Update()
     {
         transform.position += new Vector3(1, 0, 0) * MoveSpeed * Time.deltaTime;  
@@ -23,7 +23,7 @@ public class Player : MonoBehaviour
 
     public void TakeDamage(int someDamage)
     {
-        Health-= someDamage;
+        Health-= someDamage; // same thing as Health= Health-someDamage;
         if (Health < 0) Death();
     }
 
