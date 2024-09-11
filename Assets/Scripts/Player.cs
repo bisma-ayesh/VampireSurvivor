@@ -2,16 +2,19 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Scripting.APIUpdating;
 
 public class Player : MonoBehaviour
 {
     [SerializeField] private float MoveSpeed;
     [SerializeField] private int MaxHeath;
-    [SerializeField] private Transform PlayerPos;
-    private bool walkingRight = true;
+    [SerializeField] private Transform playerPos;
+    
 
     private int Health;
 
+    
+        
     void Start()
     {
         Health=MaxHeath;
@@ -21,34 +24,20 @@ public class Player : MonoBehaviour
    void Update()
 
     {
-       
-         PlayerPos.position += new Vector3 (1,0,0) * MoveSpeed * Time.deltaTime;
+        //Movement over time and Input Getkey, right arrow adds one and left arrows substracts one. ? is the conditional operator (short end way to write if and else statements)
 
-        if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.RightArrow))
-        {
-            SwitchDirection();
-        }
+        Vector3 moveDirection = new Vector3(
+            (Input.GetKey(KeyCode.RightArrow) ? 1 : 0) + (Input.GetKey(KeyCode.LeftArrow) ? -1 : 0),
+            0,
+            (Input.GetKey(KeyCode.UpArrow) ? 1 : 0) + (Input.GetKey(KeyCode.DownArrow) ? -1 : 0)
+        );
+        playerPos.position += moveDirection.normalized * MoveSpeed * Time.deltaTime;
+
 
     }
   
 
-    private void SwitchDirection()
-    {
-        {
-           
-
-            walkingRight = !walkingRight;
-
-            if (walkingRight)
-            {
-                PlayerPos.rotation = Quaternion.Euler(0, 45, 0);
-            }
-            else
-            {
-                PlayerPos.rotation = Quaternion.Euler(0, -45, 0);
-            }
-        }
-    }
+   
     public void TakeDamage(int someDamage)
     {
         Health-= someDamage; // same thing as Health= Health-someDamage;
