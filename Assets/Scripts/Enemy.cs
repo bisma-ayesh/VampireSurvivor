@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    [SerializedField] private int MaxHealth;
-    [SerializedField] private float MoveSpeed;
+     private int MaxHealth;
+     private float MoveSpeed;
 
     private int Health;
 
