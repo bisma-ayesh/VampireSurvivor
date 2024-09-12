@@ -4,11 +4,10 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-     private int MaxHealth;
-     private float MoveSpeed;
-    public GameObject prefab;
-    public Transform[] spawnPoint;
-    private Vector3 spawnPos;
+     private int MaxHealth=10;
+     private float MoveSpeed=5f;
+    public Transform Player;
+   
   
 
     private int Health;
@@ -17,6 +16,7 @@ public class Enemy : MonoBehaviour
     {
         
         Health=MaxHealth;
+        Player = GameObject.FindGameObjectWithTag("Player").transform;
        
     }
 
@@ -24,30 +24,48 @@ public class Enemy : MonoBehaviour
     void Update()
     {
 
-        if (Input.GetKeyUp(KeyCode.UpArrow))
+       //check if the reference is crooect and then envoke the method
+        if (Player != null)
         {
-            SpawnEnemy();
+            MoveTowardsPlayer();
         }
-        //move towards the player
+      
         //On collison minus one health
         //if health is less the 0 the destroy  if (player != null)
         
 
     }
 
-    public void SpawnEnemy()
-
+   
+    private void MoveTowardsPlayer()
     {
-        Instantiate(prefab, spawnPos, Quaternion.identity);
-    }
+        if (Player == null) return;
 
-    public void OnCollison()
+        Vector3 direction=(Player.position-transform.position).normalized;
+
+        transform.position += direction * MoveSpeed * Time.deltaTime;
+
+        
+
+        
+
+        
+    }
+    public void OnTriggerEnter(Collider other)
     {
-
-    }
-
-    public void Destroy()
+        if (other.CompareTag("Player"))
         {
+            TakeDamage(1);
+        }
+    }
+
+    public void TakeDamage(int damage)
+        {
+        Health -= damage;
+        if (Health < 0)
+        {
+            Destroy(gameObject);
+        }
     }
 
 }
