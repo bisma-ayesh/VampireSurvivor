@@ -51,9 +51,9 @@ public class Enemy : MonoBehaviour
 
         
     }
-    public void OnTriggerEnter(Collider other)
+    public void OnTriggerEnter(Collider collision)
     {
-        if (other.CompareTag("Player"))
+        if (collision.CompareTag("Bullet"))
         {
             TakeDamage(1);
         }
@@ -61,11 +61,12 @@ public class Enemy : MonoBehaviour
 
     public void TakeDamage(int damage)
         {
-        Health -= damage;
-        if (Health < 0)
-        {
+        //Health -= damage;
+       // if (Health < 0)
+        
+        //{
             Destroy(gameObject);
-        }
+        //}
     }
 
 }
