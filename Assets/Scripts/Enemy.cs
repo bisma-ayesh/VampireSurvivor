@@ -5,17 +5,16 @@ using UnityEngine;
 public class Enemy : MonoBehaviour
 {
      private int MaxHealth=10;
-     private float MoveSpeed=5f;
-    public Transform Player;
-   
-  
+     private float MoveSpeed=6f;
+     public Transform Player;
+    public float maxRadiansDelta = 2f;
 
-    private int Health;
+
+  
 
     void Start()
     {
-        
-        Health=MaxHealth;
+     
         Player = GameObject.FindGameObjectWithTag("Player").transform;
        
     }
@@ -24,14 +23,12 @@ public class Enemy : MonoBehaviour
     void Update()
     {
 
-       //check if the reference is crooect and then envoke the method
         if (Player != null)
         {
             MoveTowardsPlayer();
         }
       
-        //On collison minus one health
-        //if health is less the 0 the destroy  if (player != null)
+
         
 
     }
@@ -41,15 +38,20 @@ public class Enemy : MonoBehaviour
     {
         if (Player == null) return;
 
-        Vector3 direction=(Player.position-transform.position).normalized;
 
-        transform.position += direction * MoveSpeed * Time.deltaTime;
+        Vector3 direction = (Player.position - transform.position).normalized;
 
-        
+        Vector3 newDirection = Vector3.RotateTowards(transform.forward, direction, maxRadiansDelta * Time.deltaTime, 0.0f);
 
-        
+        transform.rotation = Quaternion.LookRotation(newDirection);
 
-        
+        transform.position += transform.forward * MoveSpeed * Time.deltaTime;
+
+
+
+
+
+
     }
     public void OnTriggerEnter(Collider collision)
     {
@@ -61,12 +63,11 @@ public class Enemy : MonoBehaviour
 
     public void TakeDamage(int damage)
         {
-        //Health -= damage;
-       // if (Health < 0)
+      
         
-        //{
+     
             Destroy(gameObject);
-        //}
+     
     }
 
 }

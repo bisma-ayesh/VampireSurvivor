@@ -11,7 +11,8 @@ public class Player : MonoBehaviour
     [SerializeField] private Transform PlayerPos;
 
     public GameObject HeartPrefab;
-  
+    public Animator Animator;
+
 
 
 
@@ -23,22 +24,61 @@ public class Player : MonoBehaviour
     void Start()
     {
         Health=MaxHeath;
+        Animator = GetComponentInChildren<Animator>();
+
+        
     }
 
     
    void Update()
 
     {
-        //Movement over time and Input Getkey, right arrow adds one and left arrows substracts one. ? is the conditional operator (short end way to write if and else statements)
+
+
+        Vector3 moveDirection = Vector3.zero;
+
+        if (Input.GetKey(KeyCode.RightArrow))
+        {
+            transform.rotation = Quaternion.Euler(0, 90, 0);  
+            moveDirection = Vector3.right;  
+        }
+        else if (Input.GetKey(KeyCode.LeftArrow))
+        {
+            transform.rotation = Quaternion.Euler(0, -90, 0);  
+            moveDirection = Vector3.left;  
+        }
+        else if (Input.GetKey(KeyCode.UpArrow))
+        {
+            transform.rotation = Quaternion.Euler(0, 0, 0);  
+            moveDirection = Vector3.forward; 
+        }
+        else if (Input.GetKey(KeyCode.DownArrow))
+        {
+            transform.rotation = Quaternion.Euler(0, 180, 0);  
+            moveDirection = Vector3.back;  
+        }
+
+        PlayerPos.position += moveDirection.normalized * MoveSpeed * Time.deltaTime;
+
+        float speed = moveDirection.magnitude;
+
+        if (speed > 0)
+
+        {
+            Animator.enabled = true;
+      
+            Animator.SetFloat("Speed", speed);
+        }
+        else
+        {
+            Animator.enabled = false; 
+        }
 
         
 
-        Vector3 moveDirection = new Vector3(
-            (Input.GetKey(KeyCode.RightArrow) ? 1 : 0) + (Input.GetKey(KeyCode.LeftArrow) ? -1 : 0),
-            0,
-            (Input.GetKey(KeyCode.UpArrow) ? 1 : 0) + (Input.GetKey(KeyCode.DownArrow) ? -1 : 0)
-        );
-        PlayerPos.position += moveDirection.normalized * MoveSpeed * Time.deltaTime;
+        Animator.SetFloat("Speed", speed);
+
+  
 
         if (Input.GetKeyDown(KeyCode.Space))
 

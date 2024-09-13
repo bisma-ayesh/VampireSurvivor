@@ -23,7 +23,7 @@ public class SpawnManager : MonoBehaviour
         }
 
         // Call the spawnEnemies function every 5 seconds, starting after 1 second
-        InvokeRepeating("spawnEnemies", 1, 5);
+        InvokeRepeating("spawnEnemies", 1, 3);
     }
 
     void spawnEnemies()

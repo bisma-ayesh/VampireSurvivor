@@ -4,29 +4,40 @@ using UnityEngine;
 
 public class Heart : MonoBehaviour
 {
-    
     public float speed;
+    public float startYPosition; 
 
-   
-    
-    void OnTriggerEnter(Collider collision)
+    private void Start()
     {
-        if (collision.tag == "Enemy")
-        {
-            collision.GetComponent<Enemy>().TakeDamage(5);
-        }
-        
+       
+        Vector3 position = transform.localPosition;
+        position.y = startYPosition;
+        transform.localPosition = position;
     }
 
-    // Update is called once per frame
+    private void OnTriggerEnter(Collider collision)
+    {
+        if (collision.CompareTag("Enemy"))
+        {
+            
+            collision.GetComponent<Enemy>().TakeDamage(5);
+        }
+        else
+        {
+            StartCoroutine(DestroyAfterDelay(2f));
+        }
+    }
+
+    private IEnumerator DestroyAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        Destroy(gameObject);
+    }
+
     void Update()
     {
-        
        
-           
-           Vector3 localPos = transform.localPosition;
-           transform.localPosition += transform.forward * speed * Time.deltaTime;
-        
-        
+        Vector3 localPos = transform.localPosition;
+        transform.localPosition += transform.forward * speed * Time.deltaTime;
     }
 }
