@@ -20,7 +20,7 @@ public class Heart : MonoBehaviour
         if (collision.CompareTag("Enemy"))
         {
             
-            collision.GetComponent<Enemy>().TakeDamage(5);
+            collision.GetComponent<EnemyManager>().TakeDamage(5);
         }
         else
         {
