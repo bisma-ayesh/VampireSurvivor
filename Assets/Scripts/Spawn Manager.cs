@@ -21,7 +21,7 @@ public class SpawnManager : MonoBehaviour
             spawnpoints[i] = transform.GetChild(i);
         }
 
-        InvokeRepeating("spawnEnemies", 1, 10);
+        InvokeRepeating("spawnEnemies", 5, 2);
     }
 
     void spawnEnemies()
@@ -42,6 +42,7 @@ public class SpawnManager : MonoBehaviour
             int enemyPrefabIndex = Random.Range(0, enemyPrefabs.Length);
             Instantiate(enemyPrefabs[enemyPrefabIndex], spawnpoints[spawnIndex].position, Quaternion.identity);
             Enemies.RemoveAt(randomIndex);
+           
         }
 
 

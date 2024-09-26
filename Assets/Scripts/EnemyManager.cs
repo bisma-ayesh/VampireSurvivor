@@ -24,7 +24,7 @@ public class EnemyManager : MonoBehaviour
         transform.position += transform.forward * MoveSpeed * Time.deltaTime;
     }
 
-    void OnTriggerEnter(Collider collision)
+    protected virtual void OnTriggerEnter(Collider collision)
     {
         if (collision.CompareTag("Bullet"))
         {

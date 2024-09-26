@@ -2,20 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-
-public class Enemy : EnemyManager
+public class Enemy2 : EnemyManager
 {
     private Transform playerTransform;
 
 
     protected void Awake()
     {
-        MaxHealth = 15;
-        MoveSpeed = 3f;
+        MoveSpeed = 10f;
     }
     public override void Update()
     {
-        playerTransform = GameObject.FindGameObjectWithTag("Player").transform; 
+        playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
         base.Update();
     }
 
@@ -29,11 +27,11 @@ public class Enemy : EnemyManager
         transform.position += transform.forward * MoveSpeed * Time.deltaTime;
     }
 
-    protected override void OnTriggerEnter (Collider collision)
+    protected override void OnTriggerEnter(Collider collision)
     {
-        if(collision.CompareTag("Bullet"))
+        if (collision.CompareTag("Bullet"))
         {
-            TakeDamage(2);
+            Destroy(gameObject); 
         }
     }
 }
