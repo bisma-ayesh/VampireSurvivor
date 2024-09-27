@@ -9,7 +9,7 @@ public class EnemyManager : MonoBehaviour
 
     [SerializeField] protected int MaxHealth = 10;
     [SerializeField] protected float MoveSpeed = 6f;
-    [SerializeField] protected int xpValue = 2;
+    [SerializeField] protected int xpValue = 1;
     public Transform Player;
     public float maxRadiansDelta = 2f;
     public UnityEvent<Vector3, int> OnEnemyDestroyed;

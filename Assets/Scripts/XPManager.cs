@@ -5,15 +5,18 @@ public class XPManager : MonoBehaviour
 {
     public static XPManager Instance { get; private set; }
 
-    private int currentXP;
-    private int level;
-    private int xpToLevelUp = 100; // XP needed to level up
+    private float currentXP;
+    private int level; // Changed to int to represent player levels correctly
+    public float xpToLevelUp = 10f; // XP needed to level up
 
     // Property to access current XP
-    public int CurrentXP => currentXP;
+    public float CurrentXP => currentXP;
+
+    public event Action<float> OnXPChanged; // Triggered when XP changes
+    public event Action<int> OnLevelUp; // Changed to Action<int> to match integer level
 
     // Property to access the player's level
-    public int Level => level;
+    public int Level => level; // Changed to int
 
     private void Awake()
     {
@@ -28,21 +31,32 @@ public class XPManager : MonoBehaviour
         }
     }
 
-    public void AddXP(int xpAmount)
+    public void AddXP(float xpAmount)
     {
         currentXP += xpAmount;
         Debug.Log($"Gained {xpAmount} XP! Total XP: {currentXP}");
+        OnXPChanged?.Invoke(currentXP);
         CheckLevelUp();
     }
 
     private void CheckLevelUp()
     {
-        if (currentXP >= xpToLevelUp)
+        // Level up logic
+        while (currentXP >= xpToLevelUp) // Use while to handle multiple level-ups in one go
         {
             level++;
             currentXP -= xpToLevelUp; // Reset XP for next level
-            xpToLevelUp += 50; // Increment XP needed for next level (optional)
+            xpToLevelUp += CalculateNextLevelXP(level); // Increment XP needed for next level based on function
             Debug.Log($"Leveled up! New Level: {level}");
+            OnLevelUp?.Invoke(level);
         }
     }
+
+    private float CalculateNextLevelXP(int currentLevel)
+    {
+        // Example scaling function for XP needed to level up
+        return 2f * currentLevel; // You can adjust this formula based on your desired leveling curve
+    }
 }
+
+

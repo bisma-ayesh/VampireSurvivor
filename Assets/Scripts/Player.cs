@@ -2,53 +2,48 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Scripting.APIUpdating;
+using UnityEngine.Events;
 
 public class Player : MonoBehaviour
 {
-    [SerializeField] private float MoveSpeed;
-    [SerializeField] private int MaxHeath;
+    [SerializeField] private float MoveSpeed; // Base move speed
+    [SerializeField] private float SpeedIncreasePerLevel = 5.0f; // Amount to increase speed per level
+    [SerializeField] private int MaxHealth;
     [SerializeField] private Transform PlayerPos;
-
-    public GameObject HeartPrefab;
-    public Animator Animator;
-
-
-
+    [SerializeField] private GameObject HeartPrefab; // Heart prefab to instantiate
+    [SerializeField] private Animator Animator;
 
     private int Health;
     private GameObject instantiatedHeart;
-
-
-
+    private Vector3 heartOffset = new Vector3(0, 1.0f, 0); // Offset to place the heart above the player
 
     void Start()
     {
-        Health = MaxHeath;
+        Health = MaxHealth;
         Animator = GetComponentInChildren<Animator>();
         FindObjectOfType<EnemyManager>().OnEnemyDestroyed.AddListener(HandleEnemyDestroyed);
 
-        //XPManager.Instance.OnLevelUp += HandleLevelUp;
+        // Subscribe to level up event
+        XPManager.Instance.OnLevelUp += HandleLevelUp; // Ensure this matches the delegate
 
-        HeartInsantiate();
+        // Instantiate the heart only once
+        HeartInstantiate();
     }
 
-    public void Update()
+    void Update()
     {
         PlayerMovement();
 
         if (instantiatedHeart != null)
         {
-            instantiatedHeart.transform.position = PlayerPos.position; // Follow player position
+            // Update the heart position based on player's position
+            instantiatedHeart.transform.position = PlayerPos.position + heartOffset; // Follow player position with offset
         }
 
         Debug.Log($"Current XP: {XPManager.Instance.CurrentXP}, Level: {XPManager.Instance.Level}");
     }
 
-
-
     public void PlayerMovement()
-
     {
         Vector3 moveDirection = Vector3.zero;
 
@@ -78,10 +73,8 @@ public class Player : MonoBehaviour
         float speed = moveDirection.magnitude;
 
         if (speed > 0)
-
         {
             Animator.enabled = true;
-
             Animator.SetFloat("Speed", speed);
         }
         else
@@ -90,12 +83,11 @@ public class Player : MonoBehaviour
         }
 
         Animator.SetFloat("Speed", speed);
-
     }
 
-    public void HeartInsantiate()
+    public void HeartInstantiate()
     {
-        instantiatedHeart = Instantiate(HeartPrefab, PlayerPos.position, Quaternion.identity);
+        instantiatedHeart = Instantiate(HeartPrefab, PlayerPos.position + heartOffset, Quaternion.identity);
     }
 
     private void HandleEnemyDestroyed(Vector3 enemyPosition, int xpGained)
@@ -104,26 +96,30 @@ public class Player : MonoBehaviour
         Debug.Log($"Player gained {xpGained} XP from enemy destroyed at {enemyPosition}");
     }
 
-
-    public void HandleLevelUp(int newLevel) 
+    public void HandleLevelUp(int newLevel) // Changed from float to int
     {
-        Debug.Log($"Player leveled up{newLevel}");
+        Debug.Log($"Player leveled up to level {newLevel}");
+        IncreasePlayerSpeed(newLevel); // Increase speed on level up
     }
 
+    private void IncreasePlayerSpeed(int newLevel)
+    {
+        // Increase speed based on level
+        MoveSpeed += SpeedIncreasePerLevel; // Increase speed, can modify this logic if needed
+        Debug.Log($"New Move Speed: {MoveSpeed}");
+    }
 
     public void TakeDamage(int someDamage)
     {
-            Health -= someDamage; // same thing as Health= Health-someDamage;
-            if (Health < 0) 
-                Death();
+        Health -= someDamage;
+        if (Health < 0)
+            Death();
     }
-
 
     public void Death()
     {
-            Destroy(gameObject);
+        Destroy(gameObject);
     }
-
 }
 
 

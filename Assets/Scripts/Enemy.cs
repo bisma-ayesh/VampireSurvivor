@@ -42,7 +42,7 @@ public class Enemy : EnemyManager
         OnEnemyDestroyed?.Invoke(transform.position, xpValue);
         base.DestroyEnemy();
         XPManager.Instance.AddXP(xpValue);
-        Debug.Log("Line in code destryenemy execute");
+        Debug.Log("Line execute");
         Destroy(gameObject);
     }
 
