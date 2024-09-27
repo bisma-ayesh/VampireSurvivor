@@ -1,17 +1,22 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class EnemyManager : MonoBehaviour
 {
+    
+
     [SerializeField] protected int MaxHealth = 10;
     [SerializeField] protected float MoveSpeed = 6f;
+    [SerializeField] protected int xpValue = 2;
     public Transform Player;
     public float maxRadiansDelta = 2f;
+    public UnityEvent<Vector3, int> OnEnemyDestroyed;
 
     public virtual void Update()
     {
-            MoveTowardsPlayer();
-        
+        MoveTowardsPlayer();
     }
 
     public virtual void MoveTowardsPlayer()
@@ -37,7 +42,16 @@ public class EnemyManager : MonoBehaviour
         MaxHealth -= damage;
         if (MaxHealth <= 0)
         {
-            Destroy(gameObject);
+            DestroyEnemy();
         }
     }
+
+    protected virtual void DestroyEnemy()
+    {
+        OnEnemyDestroyed?.Invoke(transform.position, xpValue);
+        Debug.Log("Enemy destroyed: " + OnEnemyDestroyed);
+    
+
+    }
 }
+

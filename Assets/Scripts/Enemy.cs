@@ -1,3 +1,4 @@
+using Newtonsoft.Json.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -15,7 +16,7 @@ public class Enemy : EnemyManager
     }
     public override void Update()
     {
-        playerTransform = GameObject.FindGameObjectWithTag("Player").transform; 
+        playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
         base.Update();
     }
 
@@ -29,11 +30,22 @@ public class Enemy : EnemyManager
         transform.position += transform.forward * MoveSpeed * Time.deltaTime;
     }
 
-    protected override void OnTriggerEnter (Collider collision)
+    protected override void OnTriggerEnter(Collider collision)
     {
-        if(collision.CompareTag("Bullet"))
+        if (collision.CompareTag("Bullet"))
         {
             TakeDamage(2);
         }
     }
+    protected override void DestroyEnemy()
+    {
+        OnEnemyDestroyed?.Invoke(transform.position, xpValue);
+        base.DestroyEnemy();
+        XPManager.Instance.AddXP(xpValue);
+        Debug.Log("Line in code destryenemy execute");
+        Destroy(gameObject);
+    }
+
+
 }
+

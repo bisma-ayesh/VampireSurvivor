@@ -31,7 +31,9 @@ public class Enemy2 : EnemyManager
     {
         if (collision.CompareTag("Bullet"))
         {
+
             Destroy(gameObject); 
+
         }
     }
 }

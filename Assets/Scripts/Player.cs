@@ -17,45 +17,60 @@ public class Player : MonoBehaviour
 
 
     private int Health;
-   
+    private GameObject instantiatedHeart;
 
-    
-        
+
+
+
     void Start()
     {
-        Health=MaxHeath;
+        Health = MaxHeath;
         Animator = GetComponentInChildren<Animator>();
+        FindObjectOfType<EnemyManager>().OnEnemyDestroyed.AddListener(HandleEnemyDestroyed);
 
-        
+        //XPManager.Instance.OnLevelUp += HandleLevelUp;
+
+        HeartInsantiate();
     }
 
-    
-   void Update()
+    public void Update()
+    {
+        PlayerMovement();
+
+        if (instantiatedHeart != null)
+        {
+            instantiatedHeart.transform.position = PlayerPos.position; // Follow player position
+        }
+
+        Debug.Log($"Current XP: {XPManager.Instance.CurrentXP}, Level: {XPManager.Instance.Level}");
+    }
+
+
+
+    public void PlayerMovement()
 
     {
-
-
         Vector3 moveDirection = Vector3.zero;
 
         if (Input.GetKey(KeyCode.RightArrow))
         {
-            transform.rotation = Quaternion.Euler(0, 90, 0);  
-            moveDirection = Vector3.right;  
+            transform.rotation = Quaternion.Euler(0, 90, 0);
+            moveDirection = Vector3.right;
         }
         else if (Input.GetKey(KeyCode.LeftArrow))
         {
-            transform.rotation = Quaternion.Euler(0, -90, 0);  
-            moveDirection = Vector3.left;  
+            transform.rotation = Quaternion.Euler(0, -90, 0);
+            moveDirection = Vector3.left;
         }
         else if (Input.GetKey(KeyCode.UpArrow))
         {
-            transform.rotation = Quaternion.Euler(0, 0, 0);  
-            moveDirection = Vector3.forward; 
+            transform.rotation = Quaternion.Euler(0, 0, 0);
+            moveDirection = Vector3.forward;
         }
         else if (Input.GetKey(KeyCode.DownArrow))
         {
-            transform.rotation = Quaternion.Euler(0, 180, 0);  
-            moveDirection = Vector3.back;  
+            transform.rotation = Quaternion.Euler(0, 180, 0);
+            moveDirection = Vector3.back;
         }
 
         PlayerPos.position += moveDirection.normalized * MoveSpeed * Time.deltaTime;
@@ -66,36 +81,49 @@ public class Player : MonoBehaviour
 
         {
             Animator.enabled = true;
-      
+
             Animator.SetFloat("Speed", speed);
         }
         else
         {
-            Animator.enabled = false; 
+            Animator.enabled = false;
         }
-
-        
 
         Animator.SetFloat("Speed", speed);
 
-  
-
-        if (Input.GetKeyDown(KeyCode.Space))
-
-        {
-            Instantiate(HeartPrefab, PlayerPos.position, Quaternion.identity);
-        }
-
     }
+
+    public void HeartInsantiate()
+    {
+        instantiatedHeart = Instantiate(HeartPrefab, PlayerPos.position, Quaternion.identity);
+    }
+
+    private void HandleEnemyDestroyed(Vector3 enemyPosition, int xpGained)
+    {
+        XPManager.Instance.AddXP(xpGained);
+        Debug.Log($"Player gained {xpGained} XP from enemy destroyed at {enemyPosition}");
+    }
+
+
+    public void HandleLevelUp(int newLevel) 
+    {
+        Debug.Log($"Player leveled up{newLevel}");
+    }
+
 
     public void TakeDamage(int someDamage)
     {
-        Health-= someDamage; // same thing as Health= Health-someDamage;
-        if (Health < 0) Death();
+            Health -= someDamage; // same thing as Health= Health-someDamage;
+            if (Health < 0) 
+                Death();
     }
+
 
     public void Death()
     {
-        Destroy (gameObject);
+            Destroy(gameObject);
     }
+
 }
+
+
