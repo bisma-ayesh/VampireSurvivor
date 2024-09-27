@@ -196,7 +196,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0.9571162, z: -0, w: 0.2897044}
   m_LocalPosition: {x: -16.288954, y: 1.411974, z: -1.8939571}
-  m_LocalScale: {x: 5.1949005, y: 5.1949015, z: 5.1949005}
+  m_LocalScale: {x: 10, y: 10, z: 10}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 677446680347666295}
@@ -217,8 +217,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MaxHealth: 10
   MoveSpeed: 6
+  xpValue: 10
   Player: {fileID: 0}
   maxRadiansDelta: 2
+  OnEnemyDestroyed:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!136 &7638080741248106585
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -256,5 +260,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MaxHealth: 10
   MoveSpeed: 4
+  xpValue: 10
   Player: {fileID: 0}
   maxRadiansDelta: 2
+  OnEnemyDestroyed:
+    m_PersistentCalls:
+      m_Calls: []

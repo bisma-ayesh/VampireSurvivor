@@ -6,28 +6,25 @@ using UnityEngine.Events;
 
 public class Player : MonoBehaviour
 {
-    [SerializeField] private float MoveSpeed; // Base move speed
-    [SerializeField] private float SpeedIncreasePerLevel = 5.0f; // Amount to increase speed per level
+    [SerializeField] private float MoveSpeed; 
+    [SerializeField] private float SpeedIncreasePerLevel = 1.0f; 
     [SerializeField] private int MaxHealth;
     [SerializeField] private Transform PlayerPos;
-    [SerializeField] private GameObject HeartPrefab; // Heart prefab to instantiate
+    [SerializeField] private GameObject HeartPrefab; 
     [SerializeField] private Animator Animator;
-
+    [SerializeField] private HealthBar healthBar;
     private int Health;
     private GameObject instantiatedHeart;
-    private Vector3 heartOffset = new Vector3(0, 1.0f, 0); // Offset to place the heart above the player
-
+    private Vector3 heartOffset = new Vector3(0, 1.0f, 0); 
     void Start()
     {
+        GameStateManager.Instance.ChangeState(new PlayingState(this));
         Health = MaxHealth;
         Animator = GetComponentInChildren<Animator>();
         FindObjectOfType<EnemyManager>().OnEnemyDestroyed.AddListener(HandleEnemyDestroyed);
-
-        // Subscribe to level up event
-        XPManager.Instance.OnLevelUp += HandleLevelUp; // Ensure this matches the delegate
-
-        // Instantiate the heart only once
+        XPManager.Instance.OnLevelUp += HandleLevelUp;
         HeartInstantiate();
+        UpdateHealthBar();
     }
 
     void Update()
@@ -36,84 +33,118 @@ public class Player : MonoBehaviour
 
         if (instantiatedHeart != null)
         {
-            // Update the heart position based on player's position
-            instantiatedHeart.transform.position = PlayerPos.position + heartOffset; // Follow player position with offset
+            
+            instantiatedHeart.transform.position = PlayerPos.position + heartOffset; 
+        }
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            TogglePause();
         }
 
         Debug.Log($"Current XP: {XPManager.Instance.CurrentXP}, Level: {XPManager.Instance.Level}");
     }
+    private void TogglePause()
+    {
+        {
+            if (GameStateManager.Instance.CurrentState is PlayingState)
+            {
+                GameStateManager.Instance.ChangeState(new PausedState());
+                Time.timeScale = 0; 
+                Animator.enabled = false; 
+                Debug.Log("Game Paused");
+            }
+            else
+            {
+                GameStateManager.Instance.ChangeState(new PlayingState(this));
+                Time.timeScale = 1; 
+                Animator.enabled = true; 
+                Debug.Log("Game Resumed");
+            }
+        }
+    }
 
     public void PlayerMovement()
     {
-        Vector3 moveDirection = Vector3.zero;
+         Vector3 moveDirection = Vector3.zero;
 
-        if (Input.GetKey(KeyCode.RightArrow))
-        {
-            transform.rotation = Quaternion.Euler(0, 90, 0);
-            moveDirection = Vector3.right;
-        }
-        else if (Input.GetKey(KeyCode.LeftArrow))
-        {
-            transform.rotation = Quaternion.Euler(0, -90, 0);
-            moveDirection = Vector3.left;
-        }
-        else if (Input.GetKey(KeyCode.UpArrow))
-        {
-            transform.rotation = Quaternion.Euler(0, 0, 0);
-            moveDirection = Vector3.forward;
-        }
-        else if (Input.GetKey(KeyCode.DownArrow))
-        {
-            transform.rotation = Quaternion.Euler(0, 180, 0);
-            moveDirection = Vector3.back;
-        }
+            if (Input.GetKey(KeyCode.RightArrow))
+            {
+                transform.rotation = Quaternion.Euler(0, 90, 0);
+                moveDirection = Vector3.right;
+            }
+            else if (Input.GetKey(KeyCode.LeftArrow))
+            {
+                transform.rotation = Quaternion.Euler(0, -90, 0);
+                moveDirection = Vector3.left;
+            }
+            else if (Input.GetKey(KeyCode.UpArrow))
+            {
+                transform.rotation = Quaternion.Euler(0, 0, 0);
+                moveDirection = Vector3.forward;
+            }
+            else if (Input.GetKey(KeyCode.DownArrow))
+            {
+                transform.rotation = Quaternion.Euler(0, 180, 0);
+                moveDirection = Vector3.back;
+            }
 
-        PlayerPos.position += moveDirection.normalized * MoveSpeed * Time.deltaTime;
+            PlayerPos.position += moveDirection.normalized * MoveSpeed * Time.deltaTime;
 
-        float speed = moveDirection.magnitude;
+            float speed = moveDirection.magnitude;
 
-        if (speed > 0)
-        {
-            Animator.enabled = true;
+            if (speed > 0)
+            {
+                Animator.enabled = true;
+                Animator.SetFloat("Speed", speed);
+            }
+            else
+            {
+                Animator.enabled = false;
+            }
+
             Animator.SetFloat("Speed", speed);
-        }
-        else
+    }
+
+     public void HeartInstantiate()
         {
-            Animator.enabled = false;
+            instantiatedHeart = Instantiate(HeartPrefab, PlayerPos.position + heartOffset, Quaternion.identity);
         }
 
-        Animator.SetFloat("Speed", speed);
-    }
+     private void HandleEnemyDestroyed(Vector3 enemyPosition, int xpGained)
+        {
+            XPManager.Instance.AddXP(xpGained);
+        }
 
-    public void HeartInstantiate()
-    {
-        instantiatedHeart = Instantiate(HeartPrefab, PlayerPos.position + heartOffset, Quaternion.identity);
-    }
+     public void HandleLevelUp(int newLevel) 
+        {
+            IncreasePlayerSpeed(newLevel); 
+        }
 
-    private void HandleEnemyDestroyed(Vector3 enemyPosition, int xpGained)
+      private void IncreasePlayerSpeed(int newLevel)
+        {
+            
+            MoveSpeed += SpeedIncreasePerLevel; 
+        }
+   public void OnTriggerEnter(Collider collision)
     {
-        XPManager.Instance.AddXP(xpGained);
-        Debug.Log($"Player gained {xpGained} XP from enemy destroyed at {enemyPosition}");
-    }
-
-    public void HandleLevelUp(int newLevel) // Changed from float to int
-    {
-        Debug.Log($"Player leveled up to level {newLevel}");
-        IncreasePlayerSpeed(newLevel); // Increase speed on level up
-    }
-
-    private void IncreasePlayerSpeed(int newLevel)
-    {
-        // Increase speed based on level
-        MoveSpeed += SpeedIncreasePerLevel; // Increase speed, can modify this logic if needed
-        Debug.Log($"New Move Speed: {MoveSpeed}");
+        if (collision.CompareTag("Enemy"))
+        {
+            TakeDamage(1);
+        }
     }
 
     public void TakeDamage(int someDamage)
     {
-        Health -= someDamage;
+            Health -= someDamage;
         if (Health < 0)
             Death();
+        else
+            UpdateHealthBar();
+    }
+    private void UpdateHealthBar()
+    {
+        float healthPercentage = (float)Health / MaxHealth; 
+        healthBar.SetHealth(healthPercentage); 
     }
 
     public void Death()

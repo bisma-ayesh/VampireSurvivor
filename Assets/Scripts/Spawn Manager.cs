@@ -6,7 +6,7 @@ public class SpawnManager : MonoBehaviour
     [SerializeField] private GameObject[] enemyPrefabs;
     private Transform[] spawnpoints;
     private int spawnCount;
-    [SerializeField] private int numberOfEnemiesToSpawn = 2;
+    [SerializeField] private int numberOfEnemiesToSpawn = 5;
 
   
 
@@ -21,7 +21,7 @@ public class SpawnManager : MonoBehaviour
             spawnpoints[i] = transform.GetChild(i);
         }
 
-        InvokeRepeating("spawnEnemies", 5, 2);
+        InvokeRepeating("spawnEnemies", 1, 1);
     }
 
     void spawnEnemies()

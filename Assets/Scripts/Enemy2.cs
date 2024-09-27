@@ -9,7 +9,7 @@ public class Enemy2 : EnemyManager
 
     protected void Awake()
     {
-        MoveSpeed = 10f;
+        MoveSpeed = 15f;
     }
     public override void Update()
     {

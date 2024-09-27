@@ -12,7 +12,7 @@ public class Enemy : EnemyManager
     protected void Awake()
     {
         MaxHealth = 15;
-        MoveSpeed = 3f;
+        MoveSpeed = 5f;
     }
     public override void Update()
     {
