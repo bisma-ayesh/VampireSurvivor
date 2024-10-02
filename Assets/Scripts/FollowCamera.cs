@@ -10,8 +10,6 @@ public class FollowCamera : MonoBehaviour
     {
         offset= transform.position-Player.position;
     }
-
-    // Update is called once per frame
     void LateUpdate()
     {
         transform.position = Player.position+offset;

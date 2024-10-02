@@ -2,13 +2,11 @@ using UnityEngine;
 
 public class GameStateManager : MonoBehaviour
 {
-    // Singleton instance
+  
     public static GameStateManager Instance { get; private set; }
 
-    // Make currentState private, but provide a public getter
     private IState currentState;
 
-    // Add a public property to access the current state
     public IState CurrentState
     {
         get { return currentState; }
@@ -16,15 +14,15 @@ public class GameStateManager : MonoBehaviour
 
     private void Awake()
     {
-        // Ensure only one instance exists
+       
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject); // Optional: if you want the GameStateManager to persist across scenes
+            DontDestroyOnLoad(gameObject); 
         }
         else
         {
-            Destroy(gameObject); // Destroy any duplicates
+            Destroy(gameObject); 
         }
     }
 

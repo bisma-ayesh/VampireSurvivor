@@ -7,9 +7,6 @@ public class SpawnManager : MonoBehaviour
     private Transform[] spawnpoints;
     private int spawnCount;
     [SerializeField] private int numberOfEnemiesToSpawn = 5;
-
-  
-
     void Start()
     {
      
