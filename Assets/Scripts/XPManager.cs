@@ -29,6 +29,25 @@ public class XPManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+
+        // Subscribe to enemy destroyed events
+        SubscribeToEnemyEvents();
+    }
+
+    private void SubscribeToEnemyEvents()
+    {
+        // Find all enemies in the scene and subscribe to their destruction events
+        EnemyManager[] enemies = FindObjectsOfType<EnemyManager>();
+        foreach (var enemy in enemies)
+        {
+            // Ensure the event subscription matches the method signature
+            enemy.OnEnemyDestroyed.AddListener(HandleEnemyDestroyed);
+        }
+    }
+
+    private void HandleEnemyDestroyed(Vector3 enemyPosition, int xpValue)
+    {
+        AddXP(xpValue); // Add XP from the destroyed enemy
     }
 
     public void AddXP(float xpAmount)
@@ -58,5 +77,7 @@ public class XPManager : MonoBehaviour
         return 2f * currentLevel; // You can adjust this formula based on your desired leveling curve
     }
 }
+
+
 
 

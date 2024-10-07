@@ -5,53 +5,55 @@ using UnityEngine.Events;
 
 public class EnemyManager : MonoBehaviour
 {
-    
+    [SerializeField] protected int maxHealth = 2; // Maximum health of the enemy
+    [SerializeField] protected float moveSpeed = 6f; // Movement speed of the enemy
+    [SerializeField] protected int xpValue = 1; // Experience points given on enemy defeat
+    public Transform Player; // Reference to the player's transform
+    public float maxRadiansDelta = 2f; // Maximum rotation speed towards the player, higher the number faster the roation
+    public UnityEvent<Vector3, int> OnEnemyDestroyed; // Event invoked when the enemy is destroyed, it will also pass the position (Vcetor3) and the amount of experience (int)
 
-    [SerializeField] protected int MaxHealth = 10;
-    [SerializeField] protected float MoveSpeed = 6f;
-    [SerializeField] protected int xpValue = 1;
-    public Transform Player;
-    public float maxRadiansDelta = 2f;
-    public UnityEvent<Vector3, int> OnEnemyDestroyed;
+    protected ObjectPool enemyPool; // Reference to the enemy pool
+
+    protected virtual void Awake()
+    {
+        enemyPool = FindObjectOfType<ObjectPool>(); // Find the ObjectPool instance in the scene
+    }
 
     public virtual void Update()
     {
-        MoveTowardsPlayer();
+        MoveTowardsPlayer(); // Move the enemy towards the player each frame
     }
 
     public virtual void MoveTowardsPlayer()
     {
-        if (Player == null) return;
+        if (Player == null) return; // Exit if the player reference is missing
 
-        Vector3 direction = (Player.position - transform.position).normalized;
-        Vector3 newDirection = Vector3.RotateTowards(transform.forward, direction, maxRadiansDelta * Time.deltaTime, 0.0f);
-        transform.rotation = Quaternion.LookRotation(newDirection);
-        transform.position += transform.forward * MoveSpeed * Time.deltaTime;
-    }
-
-    protected virtual void OnTriggerEnter(Collider collision)
-    {
-        if (collision.CompareTag("Bullet"))
-        {
-            TakeDamage(1);
-        }
+        Vector3 direction = (Player.position - transform.position).normalized; // Calculate direction to player
+        Vector3 newDirection = Vector3.RotateTowards(transform.forward, direction, maxRadiansDelta * Time.deltaTime, 0.0f); // Smooth rotation
+        transform.rotation = Quaternion.LookRotation(newDirection); // Rotate towards player, converts direction into roation
+        transform.position += transform.forward * moveSpeed * Time.deltaTime; // Move towards player
     }
 
     public void TakeDamage(int damage)
     {
-        MaxHealth -= damage;
-        if (MaxHealth <= 0)
+        maxHealth -= damage; // Decrease health by the damage amount
+        if (maxHealth <= 0)
         {
-            DestroyEnemy();
+            DestroyEnemy(); // Call method to handle enemy destruction
         }
     }
 
-    protected virtual void DestroyEnemy()
+    public void DestroyEnemy()
     {
+        // Invoke the OnEnemyDestroyed event also checks if it has any listeners, it will not invoke if there are no listeners, passing the position and XP value
         OnEnemyDestroyed?.Invoke(transform.position, xpValue);
-        Debug.Log("Enemy destroyed: " + OnEnemyDestroyed);
-    
 
+        // Debug log for tracking enemy return
+        Debug.Log($"{gameObject.name} returned to pool.");
+
+        // Return the enemy instance to the pool instead of destroying it
+        enemyPool.ReturnEnemy(gameObject);
     }
 }
+
 

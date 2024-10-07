@@ -4,36 +4,38 @@ using UnityEngine;
 
 public class Enemy2 : EnemyManager
 {
-    private Transform playerTransform;
-
-
-    protected void Awake()
+    protected override void Awake()
     {
-        MoveSpeed = 15f;
+        base.Awake(); // Call the base Awake method to ensure proper initialization
+        moveSpeed = 15f; // Set the specific move speed for Enemy2
     }
+
     public override void Update()
     {
-        playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
-        base.Update();
+        // Find the player only once to improve performance
+        if (Player == null)
+        {
+            Player = GameObject.FindGameObjectWithTag("Player")?.transform; // Find the player using the tag
+        }
+
+        base.Update(); // Call the base Update method to maintain movement logic
     }
 
     public override void MoveTowardsPlayer()
     {
-        if (playerTransform == null) return;
+        if (Player == null) return; // Exit if there is no player reference
 
-        Vector3 direction = (playerTransform.position - transform.position).normalized;
-        Vector3 newDirection = Vector3.RotateTowards(transform.forward, direction, maxRadiansDelta * Time.deltaTime, 0.0f);
-        transform.rotation = Quaternion.LookRotation(newDirection);
-        transform.position += transform.forward * MoveSpeed * Time.deltaTime;
+        Vector3 direction = (Player.position - transform.position).normalized; // Calculate direction to the player
+        Vector3 newDirection = Vector3.RotateTowards(transform.forward, direction, maxRadiansDelta * Time.deltaTime, 0.0f); // Smoothly rotate towards the player
+        transform.rotation = Quaternion.LookRotation(newDirection); // Rotate towards the new direction
+        transform.position += transform.forward * moveSpeed * Time.deltaTime; // Move towards the player
     }
 
-    protected override void OnTriggerEnter(Collider collision)
+    private void OnTriggerEnter(Collider collision)
     {
-        if (collision.CompareTag("Bullet"))
+        if (collision.CompareTag("Bullet")) // Check if the collider has the "Bullet" tag
         {
-
-            Destroy(gameObject); 
-
+            TakeDamage(1); // Inflict damage to the enemy
         }
     }
 }

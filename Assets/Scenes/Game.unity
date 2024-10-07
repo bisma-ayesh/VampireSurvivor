@@ -216,6 +216,50 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+--- !u!1 &120782221
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 120782223}
+  - component: {fileID: 120782224}
+  m_Layer: 0
+  m_Name: ObjectPool
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &120782223
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 120782221}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -11.439484, y: 7.385456, z: -0.33366394}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &120782224
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 120782221}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4270c0c42baed114e98f7320506dfc00, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &189970175
 GameObject:
   m_ObjectHideFlags: 0
@@ -1256,26 +1300,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e35399c08bb0d0a4f9342db49c9335c4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MaxHealth: 10
-  MoveSpeed: 6
+  maxHealth: 2
+  moveSpeed: 6
   xpValue: 10
   Player: {fileID: 2126726523}
   maxRadiansDelta: 2
   OnEnemyDestroyed:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: XPManager, Assembly-CSharp
-        m_MethodName: AddXP
-        m_Mode: 3
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 2
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!1 &1432192300
 GameObject:
   m_ObjectHideFlags: 0
@@ -1302,7 +1334,7 @@ Transform:
   m_GameObject: {fileID: 1432192300}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 26}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1335,10 +1367,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 69bde9cfcc8e59943ac1b9b9378d2a70, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyPrefabs:
+  enemyPrefab:
   - {fileID: 6660243240694233448, guid: 621279506d2ce534ab10eaef172ddb5b, type: 3}
   - {fileID: 4948301303654092144, guid: 825a7f969421b844c84bcd318607d44f, type: 3}
-  numberOfEnemiesToSpawn: 2
+  numberOfEnemiesToSpawn: 5
 --- !u!1 &1523838581
 GameObject:
   m_ObjectHideFlags: 0
@@ -1977,3 +2009,4 @@ SceneRoots:
   - {fileID: 472482479}
   - {fileID: 689774621}
   - {fileID: 2044703245}
+  - {fileID: 120782223}

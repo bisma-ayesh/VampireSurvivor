@@ -177,7 +177,8 @@ GameObject:
   m_Component:
   - component: {fileID: 2999576047421987792}
   - component: {fileID: 6072376804615709042}
-  - component: {fileID: 6799329775986757579}
+  - component: {fileID: -6760605479863890432}
+  - component: {fileID: 5284663267730443943}
   m_Layer: 0
   m_Name: FANTASY 1 1
   m_TagString: Enemy
@@ -225,7 +226,7 @@ CapsuleCollider:
   m_Height: 0.81819504
   m_Direction: 1
   m_Center: {x: 0.37967914, y: 0.17916605, z: -0.005513697}
---- !u!114 &6799329775986757579
+--- !u!114 &-6760605479863890432
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -237,11 +238,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da752493adf6b784e84b4d7d29340dde, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MaxHealth: 10
-  MoveSpeed: 6
-  xpValue: 10
+  maxHealth: 2
+  moveSpeed: 6
+  xpValue: 1
   Player: {fileID: 0}
   maxRadiansDelta: 2
   OnEnemyDestroyed:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &5284663267730443943
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4948301303654092144}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1dc45758a24e6d74a89220d054f25a06, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
