@@ -4,9 +4,13 @@ using UnityEngine;
 
 public class Enemy2 : EnemyManager
 {
+    
     protected override void Awake()
     {
-        base.Awake(); // Call the base Awake method to ensure proper initialization
+        base.Awake();// Call the base Awake method to ensure proper initialization
+       
+  
+       
         moveSpeed = 15f; // Set the specific move speed for Enemy2
     }
 

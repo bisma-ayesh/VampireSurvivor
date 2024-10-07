@@ -41,7 +41,7 @@ public class Player : MonoBehaviour
             TogglePause();
         }
 
-        Debug.Log($"Current XP: {XPManager.Instance.CurrentXP}, Level: {XPManager.Instance.Level}");
+        //Debug.Log($"Current XP: {XPManager.Instance.CurrentXP}, Level: {XPManager.Instance.Level}");
     }
     private void TogglePause()
     {

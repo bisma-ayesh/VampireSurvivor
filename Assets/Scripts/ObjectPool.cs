@@ -7,6 +7,14 @@ public class ObjectPool : MonoBehaviour
     // Dictionary to hold pools for different enemy types based on their prefab names
     private Dictionary<string, Queue<GameObject>> enemyPool = new Dictionary<string, Queue<GameObject>>();
 
+    // Reference to the XPManager
+    private XPManager xpManager;
+
+    private void Awake()
+    {
+        xpManager = XPManager.Instance; // Get the XPManager instance
+    }
+
     // Retrieve an enemy from the pool or create a new one if the pool is empty
     public GameObject GetEnemy(GameObject enemyPrefab)
     {
@@ -42,7 +50,7 @@ public class ObjectPool : MonoBehaviour
     }
 
     // Return an enemy to the pool
-    public void ReturnEnemy(GameObject enemyInstance)
+    public void ReturnEnemy(GameObject enemyInstance, int xpValue) // Added xpValue parameter
     {
         // Try to get the pool associated with the enemy's name
         if (enemyPool.TryGetValue(enemyInstance.name, out Queue<GameObject> enemyPoolList))
@@ -60,6 +68,16 @@ public class ObjectPool : MonoBehaviour
 
         // Deactivate the enemy before returning it to the pool
         enemyInstance.SetActive(false);
+
+        // Call XPManager to add XP when the enemy is returned to the pool
+        if (xpManager != null)
+        {
+            EnemyManager enemyManager = enemyInstance.GetComponent<EnemyManager>();
+            if (enemyManager != null)
+            {
+                xpManager.HandleEnemyDestroyed(enemyInstance.transform.position, enemyManager.XPValue);
+            }
+        }
     }
 }
 

@@ -1266,6 +1266,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1363754029}
   - component: {fileID: 1363754030}
+  - component: {fileID: 1363754031}
   m_Layer: 0
   m_Name: EnemyManager
   m_TagString: Untagged
@@ -1308,6 +1309,18 @@ MonoBehaviour:
   OnEnemyDestroyed:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &1363754031
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1363754027}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1dc45758a24e6d74a89220d054f25a06, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1432192300
 GameObject:
   m_ObjectHideFlags: 0
@@ -2001,12 +2014,12 @@ SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 189970178}
-  - {fileID: 2192018}
-  - {fileID: 1338917216}
-  - {fileID: 914897454}
-  - {fileID: 1432192302}
-  - {fileID: 1363754029}
-  - {fileID: 472482479}
   - {fileID: 689774621}
   - {fileID: 2044703245}
+  - {fileID: 914897454}
+  - {fileID: 1432192302}
   - {fileID: 120782223}
+  - {fileID: 1363754029}
+  - {fileID: 2192018}
+  - {fileID: 1338917216}
+  - {fileID: 472482479}

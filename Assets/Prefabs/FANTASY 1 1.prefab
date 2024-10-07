@@ -178,7 +178,7 @@ GameObject:
   - component: {fileID: 2999576047421987792}
   - component: {fileID: 6072376804615709042}
   - component: {fileID: -6760605479863890432}
-  - component: {fileID: 5284663267730443943}
+  - component: {fileID: -6860486189163588790}
   m_Layer: 0
   m_Name: FANTASY 1 1
   m_TagString: Enemy
@@ -246,7 +246,7 @@ MonoBehaviour:
   OnEnemyDestroyed:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &5284663267730443943
+--- !u!114 &-6860486189163588790
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

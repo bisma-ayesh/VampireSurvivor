@@ -30,6 +30,7 @@ public class XPManager : MonoBehaviour
             Destroy(gameObject);
         }
 
+
         // Subscribe to enemy destroyed events already in the scene
         SubscribeToExistingEnemies();
     }
@@ -43,6 +44,9 @@ public class XPManager : MonoBehaviour
             // Ensure the event subscription matches the method signature
             enemy.OnEnemyDestroyed.AddListener(HandleEnemyDestroyed);
         }
+
+        Debug.Log($"Found {enemies.Length} enemies in the scene.");
+
     }
 
     // This method can now be called by any enemy to handle its destruction

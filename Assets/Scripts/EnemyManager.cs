@@ -9,10 +9,12 @@ public class EnemyManager : MonoBehaviour
     [SerializeField] protected float moveSpeed = 6f; // Movement speed of the enemy
     [SerializeField] protected int xpValue = 1; // Experience points given on enemy defeat
     public Transform Player; // Reference to the player's transform
-    public float maxRadiansDelta = 2f; // Maximum rotation speed towards the player, higher the number faster the roation
-    public UnityEvent<Vector3, int> OnEnemyDestroyed; // Event invoked when the enemy is destroyed, it will also pass the position (Vcetor3) and the amount of experience (int)
+    public float maxRadiansDelta = 2f; // Maximum rotation speed towards the player
+    public UnityEvent<Vector3, int> OnEnemyDestroyed; // Event invoked when the enemy is destroyed
 
     protected ObjectPool enemyPool; // Reference to the enemy pool
+
+    public int XPValue => xpValue; // Expose XP value for use in ObjectPool
 
     protected virtual void Awake()
     {
@@ -30,7 +32,7 @@ public class EnemyManager : MonoBehaviour
 
         Vector3 direction = (Player.position - transform.position).normalized; // Calculate direction to player
         Vector3 newDirection = Vector3.RotateTowards(transform.forward, direction, maxRadiansDelta * Time.deltaTime, 0.0f); // Smooth rotation
-        transform.rotation = Quaternion.LookRotation(newDirection); // Rotate towards player, converts direction into roation
+        transform.rotation = Quaternion.LookRotation(newDirection); // Rotate towards player
         transform.position += transform.forward * moveSpeed * Time.deltaTime; // Move towards player
     }
 
@@ -41,28 +43,36 @@ public class EnemyManager : MonoBehaviour
         {
             DestroyEnemy(); // Call method to handle enemy destruction
         }
-
     }
 
-    public void DestroyEnemy()
+    public virtual void DestroyEnemy()
     {
-        // Invoke the OnEnemyDestroyed event also checks if it has any listeners, it will not invoke if there are no listeners, passing the position and XP value
-        OnEnemyDestroyed?.Invoke(transform.position, xpValue);
+        // Check if there are any listeners and invoke the OnEnemyDestroyed event
+        if (OnEnemyDestroyed != null)
+        {
+            // Invoke the event, passing the position and XP value
+            OnEnemyDestroyed.Invoke(transform.position, xpValue);
+
+        }
+        else
+        {
+            // Log if there are no listeners to indicate the event won't be invoked
+            Debug.Log("No listeners for OnEnemyDestroyed event.");
+        }
 
         // Debug log for tracking enemy return
         Debug.Log($"{gameObject.name} returned to pool.");
 
         // Return the enemy instance to the pool instead of destroying it
-        enemyPool.ReturnEnemy(gameObject);
+        enemyPool.ReturnEnemy(gameObject, xpValue); // Pass the XP value when returning
     }
-    private void SubscribeToXPManager()
+
+    /*private void SubscribeToXPManager()
     {
         // Ensure this enemy subscribes to the XPManager when instantiated
         if (XPManager.Instance != null)
         {
             OnEnemyDestroyed.AddListener(XPManager.Instance.HandleEnemyDestroyed);
         }
-    }
+    }*/
 }
-
-

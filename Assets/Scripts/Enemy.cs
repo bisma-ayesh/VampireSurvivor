@@ -4,16 +4,12 @@ using UnityEngine;
 
 public class Enemy : EnemyManager
 {
-    // No need for 'enemyPool' here since it's inherited from EnemyManager
-
     protected override void Awake()
     {
         base.Awake(); // Call the base Awake method for initialization
         maxHealth = 15; // Set the maximum health for this enemy type
-        moveSpeed = 10f; // Set the movement speed for this enemy type
+        moveSpeed = 5f; // Set the movement speed for this enemy type
     }
-
-
 
     public override void Update()
     {
@@ -32,7 +28,7 @@ public class Enemy : EnemyManager
 
         Vector3 direction = (Player.position - transform.position).normalized; // Calculate direction to the player
         Vector3 newDirection = Vector3.RotateTowards(transform.forward, direction, maxRadiansDelta * Time.deltaTime, 0.0f); // Smoothly rotate towards the player
-        transform.rotation = Quaternion.LookRotation(newDirection); // Rotate towards the new direction*/
+        transform.rotation = Quaternion.LookRotation(newDirection); // Rotate towards the new direction
         transform.position += transform.forward * moveSpeed * Time.deltaTime; // Move towards the player
     }
 
@@ -48,19 +44,20 @@ public class Enemy : EnemyManager
     {
         maxHealth = 15; // Reset health when pooled
         moveSpeed = 5f; // Reset move speed when pooled
+    }
 
+    public override void DestroyEnemy()
+    {
+        // Invoke the OnEnemyDestroyed event before destruction
+        OnEnemyDestroyed?.Invoke(transform.position, xpValue);
+
+        // Call base method to handle any additional destruction logic
+        base.DestroyEnemy();
+
+        // Add XP to the XPManager
+        XPManager.Instance.AddXP(xpValue);
+
+        // Return the enemy instance to the pool with the required XP value
+        enemyPool.ReturnEnemy(gameObject, xpValue);
     }
 }
-
-
-
-/*protected override void DestroyEnemy()
-{
-    OnEnemyDestroyed?.Invoke(transform.position, xpValue);
-    base.DestroyEnemy();
-    XPManager.Instance.AddXP(xpValue);
-    enemyPool.ReturnEnemy(gameObject);
-}*/
-
-
-
