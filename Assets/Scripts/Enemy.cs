@@ -10,7 +10,7 @@ public class Enemy : EnemyManager
     {
         base.Awake(); // Call the base Awake method for initialization
         maxHealth = 15; // Set the maximum health for this enemy type
-        moveSpeed = 5f; // Set the movement speed for this enemy type
+        moveSpeed = 10f; // Set the movement speed for this enemy type
     }
 
 
@@ -32,7 +32,7 @@ public class Enemy : EnemyManager
 
         Vector3 direction = (Player.position - transform.position).normalized; // Calculate direction to the player
         Vector3 newDirection = Vector3.RotateTowards(transform.forward, direction, maxRadiansDelta * Time.deltaTime, 0.0f); // Smoothly rotate towards the player
-        transform.rotation = Quaternion.LookRotation(newDirection); // Rotate towards the new direction
+        transform.rotation = Quaternion.LookRotation(newDirection); // Rotate towards the new direction*/
         transform.position += transform.forward * moveSpeed * Time.deltaTime; // Move towards the player
     }
 

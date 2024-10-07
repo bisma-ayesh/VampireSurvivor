@@ -5,7 +5,7 @@ using UnityEngine.UIElements;
 public class SpawnManager : MonoBehaviour
 {
     [SerializeField] private GameObject[] enemyPrefab; // Array to hold the different enemy prefabs
-    [SerializeField] private int numberOfEnemiesToSpawn = 5; // Number of enemies to spawn each time
+    [SerializeField] private int numberOfEnemiesToSpawn = 10; // Number of enemies to spawn each time
 
     private Transform[] spawnPoints; // Array to hold the spawn points
     private ObjectPool enemyPool; // Reference to the ObjectPool class
@@ -45,7 +45,9 @@ public class SpawnManager : MonoBehaviour
 
             // Get an enemy from the pool
             GameObject enemy = enemyPool.GetEnemy(enemyPrefab[enemyPrefabType]);
-           
+
+            enemy.transform.position = spawnPoints[spawnPosition].position;
+
             // After spawning remove the spawnposition ie random positon is fremoved from the available spawnpoint so that no other enemies are spawned at this location in this for loop
             availableSpawnPoints.RemoveAt(randomPosition); 
         }
@@ -54,7 +56,7 @@ public class SpawnManager : MonoBehaviour
     private List<int> GetAvailableSpawnPoints()
     {
         List<int> position = new List<int>();//empty List to store the spawn points
-        for (int i = 0; i < spawnPoints.Length; i++)
+        for (int i = 0; i < spawnPoints.Length; i++) 
         {
             position.Add(i); //each posiotn is added into the list
         }
@@ -64,10 +66,10 @@ public class SpawnManager : MonoBehaviour
     private int GetRandomSpawnPoint(List<int> availableSpawnIndices)
     {
 
-        if (availableSpawnIndices.Count == 0)//Only to make the code robust, and handle an unexpected case
+        /*if (availableSpawnIndices.Count == 0)//Only to make the code robust, and handle an unexpected case
         {
             return -1; 
-        }
+        }*/
 
         int randomPosition = Random.Range(0, availableSpawnIndices.Count); // If the list is not empty then select a positon using random range
         return randomPosition; // Return it

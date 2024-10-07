@@ -41,6 +41,7 @@ public class EnemyManager : MonoBehaviour
         {
             DestroyEnemy(); // Call method to handle enemy destruction
         }
+
     }
 
     public void DestroyEnemy()
@@ -53,6 +54,14 @@ public class EnemyManager : MonoBehaviour
 
         // Return the enemy instance to the pool instead of destroying it
         enemyPool.ReturnEnemy(gameObject);
+    }
+    private void SubscribeToXPManager()
+    {
+        // Ensure this enemy subscribes to the XPManager when instantiated
+        if (XPManager.Instance != null)
+        {
+            OnEnemyDestroyed.AddListener(XPManager.Instance.HandleEnemyDestroyed);
+        }
     }
 }
 
