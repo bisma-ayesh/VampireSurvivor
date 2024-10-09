@@ -822,6 +822,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fca6fa378f7f1df41a05cdd7ad9e0fbc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  player: {fileID: 2126726524}
+  enemyManager: {fileID: 1363754027}
+  objectPool: {fileID: 120782221}
+  spawnManager: {fileID: 1432192300}
+  xpManager: {fileID: 2044703243}
 --- !u!4 &689774621
 Transform:
   m_ObjectHideFlags: 0
@@ -1187,7 +1192,7 @@ BoxCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
@@ -1266,7 +1271,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1363754029}
   - component: {fileID: 1363754030}
-  - component: {fileID: 1363754031}
   m_Layer: 0
   m_Name: EnemyManager
   m_TagString: Untagged
@@ -1309,18 +1313,6 @@ MonoBehaviour:
   OnEnemyDestroyed:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &1363754031
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1363754027}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1dc45758a24e6d74a89220d054f25a06, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1432192300
 GameObject:
   m_ObjectHideFlags: 0
@@ -1380,10 +1372,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 69bde9cfcc8e59943ac1b9b9378d2a70, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyPrefab:
-  - {fileID: 6660243240694233448, guid: 621279506d2ce534ab10eaef172ddb5b, type: 3}
+  _enemyPrefab:
   - {fileID: 4948301303654092144, guid: 825a7f969421b844c84bcd318607d44f, type: 3}
-  numberOfEnemiesToSpawn: 5
+  - {fileID: 6660243240694233448, guid: 621279506d2ce534ab10eaef172ddb5b, type: 3}
+  _numberOfEnemiesToSpawn: 10
 --- !u!1 &1523838581
 GameObject:
   m_ObjectHideFlags: 0
@@ -1973,8 +1965,8 @@ Rigidbody:
     m_Bits: 0
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
-  m_UseGravity: 0
-  m_IsKinematic: 0
+  m_UseGravity: 1
+  m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0

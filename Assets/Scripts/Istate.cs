@@ -1,63 +1,17 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public enum GameState
+public abstract class GameState
 {
-    Playing,
-    Paused,
-    Upgrade
-}
+    protected GameStateManager gameStateManager;
 
-public interface IState
-{
-    void Enter();
-    void Update();
-
-    void Exit();
-}
-
-public class PlayingState : IState
-{
-    private Player player;
-
-    public PlayingState(Player player)
+    public GameState(GameStateManager gameStateManager)
     {
-        this.player = player;
+        this.gameStateManager = gameStateManager;
     }
 
-    public void Enter()
-    {
-       
-    }
-
-    public void Update()
-    {
-        player.PlayerMovement(); 
-    }
-
-    public void Exit()
-    {
-       
-    }
-}
-
-public class PausedState : IState
-{
-    public void Enter()
-    {
-        Debug.Log("Entered Paused State");
-    }
-
-    public void Update()
-    {
-    
-    }
-
-    public void Exit()
-    {
-        Debug.Log("Exited Paused State");
-    }
+    public abstract void EnterState();
+    public abstract void UpdateState();
+    public abstract void ExitState();
 }
 
 

@@ -4,11 +4,11 @@ using UnityEngine.UIElements;
 
 public class SpawnManager : MonoBehaviour
 {
-    [SerializeField] private GameObject[] enemyPrefab; // Array to hold the different enemy prefabs
-    [SerializeField] private int numberOfEnemiesToSpawn = 10; // Number of enemies to spawn each time
+    [SerializeField] private GameObject[] _enemyPrefab; // Array to hold the different enemy prefabs
+    [SerializeField] private int _numberOfEnemiesToSpawn = 10; // Number of enemies to spawn each time
 
-    private Transform[] spawnPoints; // Array to hold the spawn points
-    private ObjectPool enemyPool; // Reference to the ObjectPool class
+    private Transform[] _spawnPoints; // Array to hold the spawn points
+    private ObjectPool _enemyPool; // Reference to the ObjectPool class
 
     void Start()
     {
@@ -18,13 +18,13 @@ public class SpawnManager : MonoBehaviour
 
     private void InitializeSpawnManager()
     {
-        enemyPool = FindObjectOfType<ObjectPool>(); // Find the ObjectPool in the scene
+        _enemyPool = FindObjectOfType<ObjectPool>(); // Find the ObjectPool in the scene
         int spawnCount = transform.childCount; // Get the number of child objects (spawn points)
-        spawnPoints = new Transform[spawnCount]; // Initialize the spawn points array
+        _spawnPoints = new Transform[spawnCount]; // Initialize the spawn points array
 
         for (int i = 0; i < spawnCount; i++)
         {
-            spawnPoints[i] = transform.GetChild(i); // Fill the spawn points array with the chiildren
+            _spawnPoints[i] = transform.GetChild(i); // Fill the spawn points array with the chiildren
         }
     }
 
@@ -33,7 +33,7 @@ public class SpawnManager : MonoBehaviour
         List<int> availableSpawnPoints = GetAvailableSpawnPoints(); // Gnerate a list from the mothod gatavailableSpawnPoints
 
         
-        for (int i = 0; i < numberOfEnemiesToSpawn; i++)
+        for (int i = 0; i < _numberOfEnemiesToSpawn; i++)
         {
             if (availableSpawnPoints.Count == 0) return; // check if there are any spawn points left in the list and exists rigt after since we are using return
 
@@ -44,9 +44,9 @@ public class SpawnManager : MonoBehaviour
             int enemyPrefabType = GetRandomEnemyType(); // which enemy  to spawn
 
             // Get an enemy from the pool
-            GameObject enemy = enemyPool.GetEnemy(enemyPrefab[enemyPrefabType]);
+            GameObject enemy = _enemyPool.GetEnemy(_enemyPrefab[enemyPrefabType]);
 
-            enemy.transform.position = spawnPoints[spawnPosition].position;
+            enemy.transform.position = _spawnPoints[spawnPosition].position;
 
             // After spawning remove the spawnposition ie random positon is fremoved from the available spawnpoint so that no other enemies are spawned at this location in this for loop
             availableSpawnPoints.RemoveAt(randomPosition); 
@@ -56,7 +56,7 @@ public class SpawnManager : MonoBehaviour
     private List<int> GetAvailableSpawnPoints()
     {
         List<int> position = new List<int>();//empty List to store the spawn points
-        for (int i = 0; i < spawnPoints.Length; i++) 
+        for (int i = 0; i < _spawnPoints.Length; i++) 
         {
             position.Add(i); //each posiotn is added into the list
         }
@@ -77,7 +77,7 @@ public class SpawnManager : MonoBehaviour
 
     private int GetRandomEnemyType()
     {
-        return Random.Range(0, enemyPrefab.Length); // Return a random enemy prefab list
+        return Random.Range(0, _enemyPrefab.Length); // Return a random enemy prefab list
     }
 }
 

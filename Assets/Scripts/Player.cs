@@ -1,131 +1,103 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
 
 public class Player : MonoBehaviour
 {
-    [SerializeField] private float MoveSpeed; 
-    [SerializeField] private float SpeedIncreasePerLevel = 1.0f; 
-    [SerializeField] private int MaxHealth;
-    [SerializeField] private Transform PlayerPos;
-    [SerializeField] private GameObject HeartPrefab; 
-    [SerializeField] private Animator Animator;
-    [SerializeField] private HealthBar healthBar;
-    private int Health;
-    private GameObject instantiatedHeart;
-    private Vector3 heartOffset = new Vector3(0, 1.0f, 0); 
-    void Start()
+    [SerializeField] public float MoveSpeed;
+    [SerializeField] public float SpeedIncreasePerLevel = 5.0f;
+    [SerializeField] public int MaxHealth;
+    [SerializeField] public Transform PlayerPos;
+    [SerializeField] public GameObject HeartPrefab;
+    [SerializeField] public Animator Animator;
+    [SerializeField] public HealthBar healthBar;
+
+    protected int Health;
+    protected GameObject instantiatedHeart;
+    protected Vector3 heartOffset = new Vector3(0, 1.0f, 0);
+    private GameStateManager gameStateManager;
+    //private bool canMove = true; // Movement state
+
+    public virtual void Start()
     {
-        GameStateManager.Instance.ChangeState(new PlayingState(this));
+        gameStateManager=FindAnyObjectByType<GameStateManager>();
         Health = MaxHealth;
         Animator = GetComponentInChildren<Animator>();
-        FindObjectOfType<EnemyManager>().OnEnemyDestroyed.AddListener(HandleEnemyDestroyed);
-        XPManager.Instance.OnLevelUp += HandleLevelUp;
+        //FindObjectOfType<EnemyManager>().OnEnemyDestroyed.AddListener(HandleEnemyDestroyed);
+        //XPManager.Instance.OnLevelUp += HandleLevelUp;
         HeartInstantiate();
         UpdateHealthBar();
     }
 
-    void Update()
+    protected virtual void Update()
     {
-        PlayerMovement();
+
+        /*if (gameStateManager.CurrentState is PlayingState)
+        {
+            PlayerMovement();
+        }*/
+
 
         if (instantiatedHeart != null)
         {
-            
-            instantiatedHeart.transform.position = PlayerPos.position + heartOffset; 
+            instantiatedHeart.transform.position = PlayerPos.position + heartOffset;
         }
-        if (Input.GetKeyDown(KeyCode.P))
-        {
-            TogglePause();
-        }
-
-        //Debug.Log($"Current XP: {XPManager.Instance.CurrentXP}, Level: {XPManager.Instance.Level}");
     }
-    private void TogglePause()
+    //public abstract void PlayerMovement();
+
+    /*public void PlayerMovement()
     {
-        {
-            if (GameStateManager.Instance.CurrentState is PlayingState)
-            {
-                GameStateManager.Instance.ChangeState(new PausedState());
-                Time.timeScale = 0; 
-                Animator.enabled = false; 
-                Debug.Log("Game Paused");
-            }
-            else
-            {
-                GameStateManager.Instance.ChangeState(new PlayingState(this));
-                Time.timeScale = 1; 
-                Animator.enabled = true; 
-                Debug.Log("Game Resumed");
-            }
-        }
-    }
+        Vector3 moveDirection = Vector3.zero;
 
-    public void PlayerMovement()
+        if (Input.GetKey(KeyCode.RightArrow))
+        {
+            transform.rotation = Quaternion.Euler(0, 90, 0);
+            moveDirection = Vector3.right;
+        }
+        else if (Input.GetKey(KeyCode.LeftArrow))
+        {
+            transform.rotation = Quaternion.Euler(0, -90, 0);
+            moveDirection = Vector3.left;
+        }
+        else if (Input.GetKey(KeyCode.UpArrow))
+        {
+            transform.rotation = Quaternion.Euler(0, 0, 0);
+            moveDirection = Vector3.forward;
+        }
+        else if (Input.GetKey(KeyCode.DownArrow))
+        {
+            transform.rotation = Quaternion.Euler(0, 180, 0);
+            moveDirection = Vector3.back;
+        }
+
+        PlayerPos.position += moveDirection.normalized * MoveSpeed * Time.deltaTime;
+
+        float speed = moveDirection.magnitude;
+
+        Animator.SetFloat("Speed", speed);
+        Animator.enabled = speed > 0; // Only enable if speed is greater than zero
+    }*/
+
+    protected void HeartInstantiate()
     {
-         Vector3 moveDirection = Vector3.zero;
-
-            if (Input.GetKey(KeyCode.RightArrow))
-            {
-                transform.rotation = Quaternion.Euler(0, 90, 0);
-                moveDirection = Vector3.right;
-            }
-            else if (Input.GetKey(KeyCode.LeftArrow))
-            {
-                transform.rotation = Quaternion.Euler(0, -90, 0);
-                moveDirection = Vector3.left;
-            }
-            else if (Input.GetKey(KeyCode.UpArrow))
-            {
-                transform.rotation = Quaternion.Euler(0, 0, 0);
-                moveDirection = Vector3.forward;
-            }
-            else if (Input.GetKey(KeyCode.DownArrow))
-            {
-                transform.rotation = Quaternion.Euler(0, 180, 0);
-                moveDirection = Vector3.back;
-            }
-
-            PlayerPos.position += moveDirection.normalized * MoveSpeed * Time.deltaTime;
-
-            float speed = moveDirection.magnitude;
-
-            if (speed > 0)
-            {
-                Animator.enabled = true;
-                Animator.SetFloat("Speed", speed);
-            }
-            else
-            {
-                Animator.enabled = false;
-            }
-
-            Animator.SetFloat("Speed", speed);
+        instantiatedHeart = Instantiate(HeartPrefab, PlayerPos.position + heartOffset, Quaternion.identity);
     }
 
-     public void HeartInstantiate()
-        {
-            instantiatedHeart = Instantiate(HeartPrefab, PlayerPos.position + heartOffset, Quaternion.identity);
-        }
+    /*private void HandleEnemyDestroyed(Vector3 enemyPosition, int xpGained)
+    {
+        XPManager.Instance.AddXP(xpGained);
+    }
 
-     private void HandleEnemyDestroyed(Vector3 enemyPosition, int xpGained)
-        {
-            XPManager.Instance.AddXP(xpGained);
-        }
+    public void HandleLevelUp(int newLevel)
+    {
+        IncreasePlayerSpeed(newLevel);
+    }
 
-     public void HandleLevelUp(int newLevel) 
-        {
-            IncreasePlayerSpeed(newLevel); 
-        }
+    private void IncreasePlayerSpeed(int newLevel)
+    {
+        MoveSpeed += SpeedIncreasePerLevel;
+    }*/
 
-      private void IncreasePlayerSpeed(int newLevel)
-        {
-            
-            MoveSpeed += SpeedIncreasePerLevel; 
-        }
-   public void OnTriggerEnter(Collider collision)
+    public void OnTriggerEnter(Collider collision)
     {
         if (collision.CompareTag("Enemy"))
         {
@@ -135,22 +107,30 @@ public class Player : MonoBehaviour
 
     public void TakeDamage(int someDamage)
     {
-            Health -= someDamage;
+        Health -= someDamage;
         if (Health < 0)
             Death();
         else
             UpdateHealthBar();
     }
+
     private void UpdateHealthBar()
     {
-        float healthPercentage = (float)Health / MaxHealth; 
-        healthBar.SetHealth(healthPercentage); 
+        float healthPercentage = (float)Health / MaxHealth;
+        healthBar.SetHealth(healthPercentage);
     }
 
     public void Death()
     {
         Destroy(gameObject);
     }
+
+    // Public method to set the movement state
+    /*public void SetMovementState(bool state)
+    {
+        canMove = state; // Set the movement state
+    }*/
 }
+
 
 

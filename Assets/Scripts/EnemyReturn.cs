@@ -5,16 +5,16 @@ using UnityEngine;
 public class EnemyReturn : MonoBehaviour
 {
     public static EnemyReturn Instance { get; private set; }
-    private ObjectPool enemyPool;
+    private ObjectPool _enemyPool;
 
     void Start()
     {
-        enemyPool = FindAnyObjectByType<ObjectPool>();
+        _enemyPool = FindAnyObjectByType<ObjectPool>();
     }
 
     public void OnDisable()
     {
-        if (enemyPool != null)
+        if (_enemyPool != null)
         {
             // Get the EnemyManager component to access the xpValue
             EnemyManager enemyManager = GetComponent<EnemyManager>();
@@ -22,7 +22,7 @@ public class EnemyReturn : MonoBehaviour
             if (enemyManager != null)
             {
                 // Pass the xpValue when returning the enemy to the pool
-                enemyPool.ReturnEnemy(this.gameObject, enemyManager.XPValue);
+                _enemyPool.ReturnEnemy(this.gameObject, enemyManager.XPValue);
             }
             else
             {

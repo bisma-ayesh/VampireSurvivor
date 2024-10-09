@@ -2,46 +2,55 @@ using UnityEngine;
 
 public class GameStateManager : MonoBehaviour
 {
-  
-    public static GameStateManager Instance { get; private set; }
+    private GameState currentState;
 
-    private IState currentState;
+    public Player player; // Reference to the Player class instance
 
-    public IState CurrentState
+    public PlayingState playingState;
+    public PausedState pausedState;
+
+   
+    //[SerializeField] private GameObject enemyManager; // Reference to EnemyManager
+    //[SerializeField] private GameObject objectPool; // Reference to the Object Pool GameObject
+    //[SerializeField] private GameObject spawnManager; // Reference to the Spawn Manager GameObject
+   // [SerializeField] private GameObject xpManager; // Reference to the XP Manager GameObject
+
+    public GameState CurrentState // Add this public property
     {
         get { return currentState; }
     }
 
-    private void Awake()
+    private void Start()
     {
-       
-        if (Instance == null)
-        {
-            Instance = this;
-            DontDestroyOnLoad(gameObject); 
-        }
-        else
-        {
-            Destroy(gameObject); 
-        }
-    }
+        // Initialize all states and set the initial state to PlayingState
+        playingState = new PlayingState(this, player); // Pass the Player instance
 
-    public void ChangeState(IState newState)
-    {
-        if (currentState != null)
-        {
-            currentState.Exit();
-        }
+        // Pass the required GameObjects to the PausedState constructor
+        pausedState = new PausedState(this, player);
 
-        currentState = newState;
-        currentState.Enter();
+        ChangeState(playingState); // Start with the Playing state
     }
 
     private void Update()
     {
-        if (currentState != null)
+        // Ensure the current state is not null before updating
+        currentState?.UpdateState();
+    }
+
+    public void ChangeState(GameState newState)
+    {
+        // Check if the newState is valid
+        if (newState == null)
         {
-            currentState.Update();
+            Debug.LogError("Attempted to change to a null state.");
+            return;
         }
+
+        // Exit the current state if it exists
+        currentState?.ExitState();
+
+        // Update to the new state
+        currentState = newState;
+        currentState.EnterState();
     }
 }

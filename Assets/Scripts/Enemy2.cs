@@ -16,6 +16,7 @@ public class Enemy2 : EnemyManager
 
     public override void Update()
     {
+
         // Find the player only once to improve performance
         if (Player == null)
         {
@@ -34,6 +35,7 @@ public class Enemy2 : EnemyManager
         transform.rotation = Quaternion.LookRotation(newDirection); // Rotate towards the new direction
         transform.position += transform.forward * moveSpeed * Time.deltaTime; // Move towards the player
     }
+ 
 
     private void OnTriggerEnter(Collider collision)
     {

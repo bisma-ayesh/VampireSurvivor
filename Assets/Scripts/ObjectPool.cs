@@ -8,11 +8,11 @@ public class ObjectPool : MonoBehaviour
     private Dictionary<string, Queue<GameObject>> enemyPool = new Dictionary<string, Queue<GameObject>>();
 
     // Reference to the XPManager
-    private XPManager xpManager;
+    private XPManager _xpManager;
 
     private void Awake()
     {
-        xpManager = XPManager.Instance; // Get the XPManager instance
+        _xpManager = XPManager.Instance; // Get the XPManager instance
     }
 
     // Retrieve an enemy from the pool or create a new one if the pool is empty
@@ -29,9 +29,9 @@ public class ObjectPool : MonoBehaviour
             else
             {
                 // Dequeue an existing enemy from the pool, activate it, and return it
-                GameObject enemy = enemyPoolList.Dequeue();
-                enemy.SetActive(true);
-                return enemy;
+                GameObject _enemy = enemyPoolList.Dequeue();
+                _enemy.SetActive(true);
+                return _enemy;
             }
         }
         else
@@ -42,10 +42,10 @@ public class ObjectPool : MonoBehaviour
     }
 
     // Create a new enemy and assign it to the pool
-    private GameObject CreateNewEnemy(GameObject enemyPrefab)
+    private GameObject CreateNewEnemy(GameObject _enemyPrefab)
     {
-        GameObject instantiatedEnemy = Instantiate(enemyPrefab); // Instantiate a new enemy
-        instantiatedEnemy.name = enemyPrefab.name; // Set its name to the prefab's name
+        GameObject instantiatedEnemy = Instantiate(_enemyPrefab); // Instantiate a new enemy
+        instantiatedEnemy.name = _enemyPrefab.name; // Set its name to the prefab's name
         return instantiatedEnemy; // Return the newly created enemy
     }
 
@@ -70,12 +70,12 @@ public class ObjectPool : MonoBehaviour
         enemyInstance.SetActive(false);
 
         // Call XPManager to add XP when the enemy is returned to the pool
-        if (xpManager != null)
+        if (_xpManager != null)
         {
             EnemyManager enemyManager = enemyInstance.GetComponent<EnemyManager>();
             if (enemyManager != null)
             {
-                xpManager.HandleEnemyDestroyed(enemyInstance.transform.position, enemyManager.XPValue);
+                _xpManager.HandleEnemyDestroyed(enemyInstance.transform.position, enemyManager.XPValue);
             }
         }
     }
