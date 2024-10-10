@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 35c6d3f1b69cf1b4e94f9903b8626a52, type: 3}
+  m_Name: PlayerHealthUpgrade
+  m_EditorClassIdentifier: 
+  upgradeName: Health
+  healthIncreaseAmount: 5
+  buttonPrefab: {fileID: 3917569169509437261, guid: 6f0a42b60ed3d4c40b9c69552d871d1c, type: 3}

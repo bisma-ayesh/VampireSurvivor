@@ -2,10 +2,7 @@ using UnityEngine;
 
 public class PlayingState : GameState
 {
-    
-  
     [SerializeField] Player player;
-    
 
     public PlayingState(GameStateManager gameStateManager, Player player) : base(gameStateManager)
     {
@@ -14,9 +11,21 @@ public class PlayingState : GameState
 
     public override void EnterState()
     {
-        
         Debug.Log("Entered Playing State");
+
+        // Check if XPManager.Instance is null to ensure it's initialized
+        if (XPManager.Instance == null)
+        {
+            Debug.LogError("XPManager.Instance is null. Subscription failed.");
+        }
+        else
+        {
+            // Subscribe to the level-up event from XPManager
+            XPManager.Instance.OnLevelUp += HandleLevelUp;
+            Debug.Log($"Subscribed to OnLevelUp event: {nameof(HandleLevelUp)}");
+        }
     }
+
 
     public override void UpdateState()
     {
@@ -57,8 +66,20 @@ public class PlayingState : GameState
         }
     }
 
+    // Event handler for level-up
+    private void HandleLevelUp(int newLevel)
+    {
+        Debug.Log($"Player leveled up to level {newLevel}. Switching to UpgradeState.");
+
+        // Switch to the UpgradeState
+        gameStateManager.ChangeState(gameStateManager.upgradeState);
+    }
+
     public override void ExitState()
     {
+        // Unsubscribe from the level-up event to avoid memory leaks
+        XPManager.Instance.OnLevelUp -= HandleLevelUp;
+
         // Any cleanup code for exiting the playing state
         Debug.Log("Exiting Playing State");
     }

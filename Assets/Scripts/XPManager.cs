@@ -58,7 +58,7 @@ public class XPManager : MonoBehaviour
     public void AddXP(float xpAmount)
     {
         currentXP += xpAmount;
-        Debug.Log($"Gained {xpAmount} XP! Total XP: {currentXP}");
+        //Debug.Log($"Gained {xpAmount} XP! Total XP: {currentXP}");
         OnXPChanged?.Invoke(currentXP); // Notify listeners about the XP change
         CheckLevelUp(); // Check if the player leveled up
     }
@@ -71,8 +71,9 @@ public class XPManager : MonoBehaviour
             level++;
             currentXP -= xpToLevelUp; // Reset XP for next level
             xpToLevelUp += CalculateNextLevelXP(level); // Calculate XP required for the next level
-            Debug.Log($"Leveled up! New Level: {level}");
-            OnLevelUp?.Invoke(level); // Notify listeners about the level up
+           // Debug.Log($"Leveled up! New Level: {level}");
+            OnLevelUp?.Invoke(level);// Notify listeners about the level up
+            Debug.Log(OnLevelUp + "invoked");
         }
     }
 

@@ -4,7 +4,7 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     [SerializeField] public float MoveSpeed;
-    [SerializeField] public float SpeedIncreasePerLevel = 5.0f;
+    //[SerializeField] public float SpeedIncreasePerLevel = 5.0f;
     [SerializeField] public int MaxHealth;
     [SerializeField] public Transform PlayerPos;
     [SerializeField] public GameObject HeartPrefab;
@@ -118,6 +118,17 @@ public class Player : MonoBehaviour
     {
         float healthPercentage = (float)Health / MaxHealth;
         healthBar.SetHealth(healthPercentage);
+    }
+
+    public void IncreaseHealth(int amount)
+    {
+        Health += amount;
+        Debug.Log($"Player health increased by {amount}. New health: {Health}");
+    }
+    public void IncreaseSpeed(float amount)
+    {
+        MoveSpeed += amount;
+        Debug.Log($"Player Speed increased by {amount}. New health: {MoveSpeed}");
     }
 
     public void Death()

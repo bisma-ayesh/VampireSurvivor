@@ -26,8 +26,8 @@ public override void EnterState()
         Time.timeScale = 0;
 
         //Freeze the player and disable movement
-         player.Animator.SetFloat("Speed", 0);
-         player.Animator.enabled = false;
+         //player.Animator.SetFloat("Speed", 0);
+         //player.Animator.enabled = false;
 
          /*if (enemyManager != null)
          {
