@@ -8,8 +8,9 @@ public class Heart : MonoBehaviour
     public float startYPosition;
     public float orbitRadius = 1f; 
     private Vector3 orbitCenter; 
-    private float angle; 
+    private float angle;
 
+   
     private void Start()
     {
         Vector3 position = transform.localPosition;

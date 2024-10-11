@@ -23,13 +23,12 @@ public class XPManager : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject);
+          
         }
         else
         {
             Destroy(gameObject);
         }
-
 
         // Subscribe to enemy destroyed events already in the scene
         SubscribeToExistingEnemies();
@@ -46,7 +45,6 @@ public class XPManager : MonoBehaviour
         }
 
         Debug.Log($"Found {enemies.Length} enemies in the scene.");
-
     }
 
     // This method can now be called by any enemy to handle its destruction
@@ -58,7 +56,6 @@ public class XPManager : MonoBehaviour
     public void AddXP(float xpAmount)
     {
         currentXP += xpAmount;
-        //Debug.Log($"Gained {xpAmount} XP! Total XP: {currentXP}");
         OnXPChanged?.Invoke(currentXP); // Notify listeners about the XP change
         CheckLevelUp(); // Check if the player leveled up
     }
@@ -71,9 +68,8 @@ public class XPManager : MonoBehaviour
             level++;
             currentXP -= xpToLevelUp; // Reset XP for next level
             xpToLevelUp += CalculateNextLevelXP(level); // Calculate XP required for the next level
-           // Debug.Log($"Leveled up! New Level: {level}");
-            OnLevelUp?.Invoke(level);// Notify listeners about the level up
-            Debug.Log(OnLevelUp + "invoked");
+            OnLevelUp?.Invoke(level); // Notify listeners about the level up
+            Debug.Log($"Leveled up! New Level: {level}");
         }
     }
 
@@ -83,7 +79,6 @@ public class XPManager : MonoBehaviour
         return 2f * currentLevel; // You can adjust this formula for your desired leveling curve
     }
 }
-
 
 
 

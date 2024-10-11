@@ -7,6 +7,7 @@ public class EnemyReturn : MonoBehaviour
     public static EnemyReturn Instance { get; private set; }
     private ObjectPool _enemyPool;
 
+    
     void Start()
     {
         _enemyPool = FindAnyObjectByType<ObjectPool>();

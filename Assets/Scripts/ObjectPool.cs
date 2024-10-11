@@ -12,6 +12,7 @@ public class ObjectPool : MonoBehaviour
 
     private void Awake()
     {
+        
         _xpManager = XPManager.Instance; // Get the XPManager instance
     }
 

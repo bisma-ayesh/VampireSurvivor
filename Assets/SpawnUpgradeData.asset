@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ba0775f52e85b64a8bf111ee4de8625, type: 3}
+  m_Name: SpawnUpgradeData
+  m_EditorClassIdentifier: 
+  numberOfEnemiesToSpawn: 5
+  enemyPrefabs:
+  - {fileID: 4948301303654092144, guid: 825a7f969421b844c84bcd318607d44f, type: 3}
+  - {fileID: 6660243240694233448, guid: 621279506d2ce534ab10eaef172ddb5b, type: 3}

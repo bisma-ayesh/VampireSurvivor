@@ -11,6 +11,7 @@ public class EnemyManager : MonoBehaviour
     public UnityEvent<Vector3, int> OnEnemyDestroyed;
 
 
+
     protected ObjectPool enemyPool;
 
     // Reference to the player's Animator
@@ -21,6 +22,7 @@ public class EnemyManager : MonoBehaviour
     protected virtual void Awake()
     {
         enemyPool = FindObjectOfType<ObjectPool>();
+     
 
         // Assume the player has an Animator component and we get the reference here
         if (Player != null)

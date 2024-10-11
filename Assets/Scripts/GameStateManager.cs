@@ -1,73 +1,68 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameStateManager : MonoBehaviour
 {
     private GameState currentState;
 
-    public Player player; // Reference to the Player class instance
+    public Player player;
 
     public PlayingState playingState;
     public PausedState pausedState;
     public UpgradeState upgradeState;
     public GameObject upgradePanelPrefab;
+    public GameObject gameOverUI;
 
-    // public HealthUpgrade availableUpgrades; // Add this to hold available upgrades
-    // public GameObject upgradeButtonPrefab; // Reference to the Upgrade Button prefab
-    // public Transform upgradeButtonParent;
+    private SpawnManager spawnManager; // Define spawnManager
+    public SpawnUpgradeData spawnUpgradeData; // Reference to the SpawnUpgradeData ScriptableObject
 
-
-    //[SerializeField] private GameObject enemyManager; // Reference to EnemyManager
-    //[SerializeField] private GameObject objectPool; // Reference to the Object Pool GameObject
-    //[SerializeField] private GameObject spawnManager; // Reference to the Spawn Manager GameObject
-    // [SerializeField] private GameObject xpManager; // Reference to the XP Manager GameObject
-
-    public GameState CurrentState // Add this public property
+    public GameState CurrentState
     {
         get { return currentState; }
     }
 
     private void Start()
     {
-        // Initialize all states and set the initial state to PlayingState
-        playingState = new PlayingState(this, player); // Pass the Player instance
-
-        // Pass the required GameObjects to the PausedState constructor
-        pausedState = new PausedState(this, player);
-
-        upgradeState = new UpgradeState(this, player) { upgradePanelPrefab = upgradePanelPrefab };
-
-        // Initialize the UpgradeState with the necessary UI references
-        // upgradeState = new UpgradeState(this, player, availableUpgrades)
-        //{
-        // upgradeButtonPrefab = upgradeButtonPrefab,
-        //  upgradeButtonContainer = upgradeButtonParent
-        // };
-
-        // Set the initial state
-        ChangeState(playingState); // Start with the Playing state
+        spawnManager = FindObjectOfType<SpawnManager>(); // Find the SpawnManager in the scene
+        InitializeStates();
+        ChangeState(playingState); // Start in the playing state
     }
 
     private void Update()
     {
-        // Ensure the current state is not null before updating
         currentState?.UpdateState();
+    }
+
+    // Helper method to initialize states
+    private void InitializeStates()
+    {
+        playingState = new PlayingState(this, player, spawnManager);
+        pausedState = new PausedState(this, player);
+        upgradeState = new UpgradeState(this, player, spawnManager, spawnUpgradeData) { upgradePanelPrefab = upgradePanelPrefab };
     }
 
     public void ChangeState(GameState newState)
     {
-        // Check if the newState is valid
         if (newState == null)
         {
             Debug.LogError("Attempted to change to a null state.");
             return;
         }
 
-        // Exit the current state if it exists
-        currentState?.ExitState();
-
-        // Update to the new state
         currentState?.ExitState();
         currentState = newState;
         currentState.EnterState();
+    }
+
+    public void GameOver()
+    {
+        gameOverUI.SetActive(true);
+    }
+
+    public void Restart()
+    {
+        // Reload the current scene
+        PlayerPrefs.DeleteAll(); // Clear all saved data
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 }

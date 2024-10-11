@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Enemy : EnemyManager
 {
@@ -57,7 +58,11 @@ public class Enemy : EnemyManager
         // Add XP to the XPManager
         XPManager.Instance.AddXP(xpValue);
 
+        // Update score when enemy is destroyed
+        ScoreManager.Instance.AddScore(xpValue);
+
         // Return the enemy instance to the pool with the required XP value
         enemyPool.ReturnEnemy(gameObject, xpValue);
     }
+
 }

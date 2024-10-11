@@ -2,16 +2,20 @@ using UnityEngine;
 
 public class PlayingState : GameState
 {
-    [SerializeField] Player player;
+    [SerializeField] private Player player;
+    private SpawnManager spawnManager; // Add reference to SpawnManager
 
-    public PlayingState(GameStateManager gameStateManager, Player player) : base(gameStateManager)
+    public PlayingState(GameStateManager gameStateManager, Player player, SpawnManager spawnManager) : base(gameStateManager)
     {
         this.player = player;
+        this.spawnManager = spawnManager; // Initialize spawn manager
     }
 
     public override void EnterState()
     {
         Debug.Log("Entered Playing State");
+
+
 
         // Check if XPManager.Instance is null to ensure it's initialized
         if (XPManager.Instance == null)
@@ -84,5 +88,3 @@ public class PlayingState : GameState
         Debug.Log("Exiting Playing State");
     }
 }
-
-
