@@ -8,13 +8,13 @@ public class UpgradeButton : MonoBehaviour
     public HealthUpgrade healthUpgrade;
     public SpeedUpgrade speedUpgrade;
 
-    private GameStateManager gameStateManager;
+    private GameStateManager _gameStateManager;
 
     public void Setup(System.Action<HealthUpgrade> healthAction, System.Action<SpeedUpgrade> speedAction, GameStateManager stateManager)
     {
         onHealthUpgrade = healthAction;
         onSpeedUpgrade = speedAction;
-        gameStateManager = stateManager;
+        _gameStateManager = stateManager;
 
     }
 }

@@ -2,29 +2,25 @@ using UnityEngine;
 
 public class PlayingState : GameState
 {
-    [SerializeField] private Player player;
-    private SpawnManager spawnManager; // Add reference to SpawnManager
+    [SerializeField] private Player _player;
+    [SerializeField] private SpawnManager _spawnManager; 
 
     public PlayingState(GameStateManager gameStateManager, Player player, SpawnManager spawnManager) : base(gameStateManager)
     {
-        this.player = player;
-        this.spawnManager = spawnManager; // Initialize spawn manager
+        this._player = player;
+        this._spawnManager = spawnManager; 
     }
 
     public override void EnterState()
     {
         Debug.Log("Entered Playing State");
 
-
-
-        // Check if XPManager.Instance is null to ensure it's initialized
         if (XPManager.Instance == null)
         {
             Debug.LogError("XPManager.Instance is null. Subscription failed.");
         }
         else
         {
-            // Subscribe to the level-up event from XPManager
             XPManager.Instance.OnLevelUp += HandleLevelUp;
             Debug.Log($"Subscribed to OnLevelUp event: {nameof(HandleLevelUp)}");
         }
@@ -33,58 +29,53 @@ public class PlayingState : GameState
 
     public override void UpdateState()
     {
-        // Handle player movement
+       
         Vector3 moveDirection = Vector3.zero;
 
         if (Input.GetKey(KeyCode.RightArrow))
         {
-            player.transform.rotation = Quaternion.Euler(0, 90, 0);
+            _player.transform.rotation = Quaternion.Euler(0, 90, 0);
             moveDirection = Vector3.right;
         }
         else if (Input.GetKey(KeyCode.LeftArrow))
         {
-            player.transform.rotation = Quaternion.Euler(0, -90, 0);
+            _player.transform.rotation = Quaternion.Euler(0, -90, 0);
             moveDirection = Vector3.left;
         }
         else if (Input.GetKey(KeyCode.UpArrow))
         {
-            player.transform.rotation = Quaternion.Euler(0, 0, 0);
+            _player.transform.rotation = Quaternion.Euler(0, 0, 0);
             moveDirection = Vector3.forward;
         }
         else if (Input.GetKey(KeyCode.DownArrow))
         {
-            player.transform.rotation = Quaternion.Euler(0, 180, 0);
+             _player.transform.rotation = Quaternion.Euler(0, 180, 0);
             moveDirection = Vector3.back;
         }
 
-        player.PlayerPos.position += moveDirection.normalized * player.MoveSpeed * Time.deltaTime;
+        _player.playerPos.position += moveDirection.normalized * _player.moveSpeed * Time.deltaTime;
 
         float speed = moveDirection.magnitude;
-        player.Animator.SetFloat("Speed", speed);
-        player.Animator.enabled = speed > 0;
+        _player.animator.SetFloat("Speed", speed);
+        _player.animator.enabled = speed > 0;
 
-        // Switch to PausedState if "P" is pressed
+
         if (Input.GetKeyDown(KeyCode.P))
         {
-            gameStateManager.ChangeState(gameStateManager.pausedState);
+            GameStateManager.ChangeState(GameStateManager.pausedState);
         }
     }
 
-    // Event handler for level-up
-    private void HandleLevelUp(int newLevel)
+    private void HandleLevelUp(int _newLevel)
     {
-        Debug.Log($"Player leveled up to level {newLevel}. Switching to UpgradeState.");
-
-        // Switch to the UpgradeState
-        gameStateManager.ChangeState(gameStateManager.upgradeState);
+        Debug.Log($"Player leveled up to level {_newLevel}. Switching to UpgradeState.");
+        GameStateManager.ChangeState(GameStateManager.upgradeState);
     }
 
     public override void ExitState()
     {
-        // Unsubscribe from the level-up event to avoid memory leaks
+        
         XPManager.Instance.OnLevelUp -= HandleLevelUp;
-
-        // Any cleanup code for exiting the playing state
         Debug.Log("Exiting Playing State");
     }
 }

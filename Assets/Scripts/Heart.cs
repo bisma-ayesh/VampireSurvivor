@@ -8,7 +8,7 @@ public class Heart : MonoBehaviour
     public float startYPosition;
     public float orbitRadius = 1f; 
     private Vector3 orbitCenter; 
-    private float angle;
+    private float _angle;
 
    
     private void Start()
@@ -32,10 +32,10 @@ public class Heart : MonoBehaviour
      
         orbitCenter = transform.localPosition;
 
-        angle += speed * Time.deltaTime;
+        _angle += speed * Time.deltaTime;
 
-        float xOffset = Mathf.Cos(angle) * orbitRadius;
-        float zOffset = Mathf.Sin(angle) * orbitRadius;
+        float xOffset = Mathf.Cos(_angle) * orbitRadius;
+        float zOffset = Mathf.Sin(_angle) * orbitRadius;
 
         transform.localPosition = new Vector3(orbitCenter.x + xOffset, startYPosition, orbitCenter.z + zOffset);
     }

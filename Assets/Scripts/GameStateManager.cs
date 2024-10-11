@@ -13,8 +13,8 @@ public class GameStateManager : MonoBehaviour
     public GameObject upgradePanelPrefab;
     public GameObject gameOverUI;
 
-    private SpawnManager spawnManager; // Define spawnManager
-    public SpawnUpgradeData spawnUpgradeData; // Reference to the SpawnUpgradeData ScriptableObject
+    private SpawnManager _spawnManager; 
+    public SpawnUpgradeData spawnUpgradeData; 
 
     public GameState CurrentState
     {
@@ -23,9 +23,9 @@ public class GameStateManager : MonoBehaviour
 
     private void Start()
     {
-        spawnManager = FindObjectOfType<SpawnManager>(); // Find the SpawnManager in the scene
+        _spawnManager = FindObjectOfType<SpawnManager>(); 
         InitializeStates();
-        ChangeState(playingState); // Start in the playing state
+        ChangeState(playingState); 
     }
 
     private void Update()
@@ -33,12 +33,12 @@ public class GameStateManager : MonoBehaviour
         currentState?.UpdateState();
     }
 
-    // Helper method to initialize states
+    
     private void InitializeStates()
     {
-        playingState = new PlayingState(this, player, spawnManager);
+        playingState = new PlayingState(this, player, _spawnManager);
         pausedState = new PausedState(this, player);
-        upgradeState = new UpgradeState(this, player, spawnManager, spawnUpgradeData) { upgradePanelPrefab = upgradePanelPrefab };
+        upgradeState = new UpgradeState(this, player, _spawnManager, spawnUpgradeData) { upgradePanelPrefab = upgradePanelPrefab };
     }
 
     public void ChangeState(GameState newState)
@@ -61,8 +61,8 @@ public class GameStateManager : MonoBehaviour
 
     public void Restart()
     {
-        // Reload the current scene
-        PlayerPrefs.DeleteAll(); // Clear all saved data
+        
+        PlayerPrefs.DeleteAll(); 
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 }

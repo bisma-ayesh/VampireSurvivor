@@ -7,7 +7,7 @@ public class SpawnUpgradeData : ScriptableObject
 
     public void UpdateSpawndData(SpawnManager spawnManager)
     {
-        Debug.Log("Updating spawn data, increasing spawn interval by: " + decreaseSpawnAmount); // Log the increase amount
-        spawnManager.DecreaseSpawnInterval(decreaseSpawnAmount); // Update the spawn interval
+        Debug.Log("Updating spawn data, increasing spawn interval by: " + decreaseSpawnAmount); 
+        spawnManager.DecreaseSpawnInterval(decreaseSpawnAmount); 
     }
 }

@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class XPUIManager : MonoBehaviour
 {
-    [SerializeField] private Image image;
+    [SerializeField] private Image _image;
 
   
 
@@ -13,8 +13,6 @@ public class XPUIManager : MonoBehaviour
     {
        
         XPManager.Instance.OnXPChanged += UpdateXPUI;
-      
-
   
         UpdateXPUI(XPManager.Instance.CurrentXP);
     }
@@ -32,7 +30,7 @@ public class XPUIManager : MonoBehaviour
        
             float xpToLevelUp = XPManager.Instance.xpToLevelUp;
             float normalizedXP = currentXP / xpToLevelUp;
-            image.fillAmount = normalizedXP;
+            _image.fillAmount = normalizedXP;
         
     }
    

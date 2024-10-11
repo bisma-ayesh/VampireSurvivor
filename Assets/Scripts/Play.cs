@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 public class Play : MonoBehaviour
 
 {
-    private GameStateManager gameStateManager;
+    private GameStateManager _gameStateManager;
     public void PlayGame()
     {
         SceneManager.LoadScene(0);

@@ -5,78 +5,76 @@ public class XPManager : MonoBehaviour
 {
     public static XPManager Instance { get; private set; }
 
-    private float currentXP;
-    private int level; // Represents player levels
-    public float xpToLevelUp = 10f; // XP needed to level up
+    private float _currentXP;
+    private int _level; 
+    public float xpToLevelUp = 10f; 
 
-    // Property to access current XP
-    public float CurrentXP => currentXP;
+   
+    public float CurrentXP => _currentXP;
 
-    public event Action<float> OnXPChanged; // Triggered when XP changes
-    public event Action<int> OnLevelUp; // Triggered when the player levels up
+    public event Action<float> OnXPChanged; 
+    public event Action<int> OnLevelUp; 
 
-    // Property to access the player's level
-    public int Level => level;
+   
+    public int Level => _level;
 
     private void Awake()
     {
         if (Instance == null)
         {
-            Instance = this;
-          
+            Instance = this; 
         }
         else
         {
             Destroy(gameObject);
         }
 
-        // Subscribe to enemy destroyed events already in the scene
+       
         SubscribeToExistingEnemies();
     }
 
     private void SubscribeToExistingEnemies()
     {
-        // Find all enemies in the scene and subscribe to their destruction events
+        
         EnemyManager[] enemies = FindObjectsOfType<EnemyManager>();
         foreach (var enemy in enemies)
         {
-            // Ensure the event subscription matches the method signature
+            
             enemy.OnEnemyDestroyed.AddListener(HandleEnemyDestroyed);
         }
 
         Debug.Log($"Found {enemies.Length} enemies in the scene.");
     }
 
-    // This method can now be called by any enemy to handle its destruction
+   
     public void HandleEnemyDestroyed(Vector3 enemyPosition, int xpValue)
     {
-        AddXP(xpValue); // Add XP from the destroyed enemy
+        AddXP(xpValue); 
     }
 
     public void AddXP(float xpAmount)
     {
-        currentXP += xpAmount;
-        OnXPChanged?.Invoke(currentXP); // Notify listeners about the XP change
-        CheckLevelUp(); // Check if the player leveled up
+        _currentXP += xpAmount;
+        OnXPChanged?.Invoke(_currentXP); 
+        CheckLevelUp(); 
     }
 
     private void CheckLevelUp()
     {
-        // Level up logic
-        while (currentXP >= xpToLevelUp) // Handle multiple level-ups if XP exceeds the threshold
+        
+        while (_currentXP >= xpToLevelUp) 
         {
-            level++;
-            currentXP -= xpToLevelUp; // Reset XP for next level
-            xpToLevelUp += CalculateNextLevelXP(level); // Calculate XP required for the next level
-            OnLevelUp?.Invoke(level); // Notify listeners about the level up
-            Debug.Log($"Leveled up! New Level: {level}");
+            _level++;
+            _currentXP -= xpToLevelUp;
+            xpToLevelUp += CalculateNextLevelXP(_level); 
+            OnLevelUp?.Invoke(_level);
+            Debug.Log($"Leveled up! New Level: {_level}");
         }
     }
 
     private float CalculateNextLevelXP(int currentLevel)
     {
-        // Example scaling function for XP needed to level up
-        return 2f * currentLevel; // You can adjust this formula for your desired leveling curve
+        return 2f * currentLevel; 
     }
 }
 

@@ -4,24 +4,24 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    [SerializeField] public float MoveSpeed;
-    [SerializeField] public int MaxHealth;
-    [SerializeField] public Transform PlayerPos;
-    [SerializeField] public GameObject HeartPrefab;
-    [SerializeField] public Animator Animator;
+    [SerializeField] public float moveSpeed;
+    [SerializeField] public int maxHealth;
+    [SerializeField] public Transform playerPos;
+    [SerializeField] public GameObject heartPrefab;
+    [SerializeField] public Animator animator;
     [SerializeField] public HealthBar healthBar;
 
     protected int Health;
     protected GameObject instantiatedHeart;
     protected Vector3 heartOffset = new Vector3(0, 1.0f, 0);
-    private GameStateManager gameStateManager;
+    private GameStateManager _gameStateManager;
   
 
     public virtual void Start()
     {
-        gameStateManager = FindAnyObjectByType<GameStateManager>();
-        Health = MaxHealth;
-        Animator = GetComponentInChildren<Animator>();
+        _gameStateManager = FindAnyObjectByType<GameStateManager>();
+        Health = maxHealth;
+        animator = GetComponentInChildren<Animator>();
 
         HeartInstantiate();
         UpdateHealthBar();
@@ -31,18 +31,18 @@ public class Player : MonoBehaviour
     {
         if (instantiatedHeart != null)
         {
-            instantiatedHeart.transform.position = PlayerPos.position + heartOffset;
+            instantiatedHeart.transform.position = playerPos.position + heartOffset;
         }
     }
 
     protected void HeartInstantiate()
     {
-        instantiatedHeart = Instantiate(HeartPrefab, PlayerPos.position + heartOffset, Quaternion.identity);
+        instantiatedHeart = Instantiate(heartPrefab, playerPos.position + heartOffset, Quaternion.identity);
     }
 
-    public void OnTriggerEnter(Collider collision)
+    public void OnTriggerEnter(Collider _collision)
     {
-        if (collision.CompareTag("Enemy"))
+        if (_collision.CompareTag("Enemy"))
         {
             TakeDamage(1);
         }
@@ -59,7 +59,7 @@ public class Player : MonoBehaviour
 
     private void UpdateHealthBar()
     {
-        float healthPercentage = (float)Health / MaxHealth;
+        float healthPercentage = (float)Health / maxHealth;
         healthBar.SetHealth(healthPercentage);
     }
 
@@ -71,16 +71,16 @@ public class Player : MonoBehaviour
 
     public void IncreaseSpeed(float amount)
     {
-        MoveSpeed += amount;
-        Debug.Log($"Player Speed increased by {amount}. New speed: {MoveSpeed}");
+        moveSpeed += amount;
+        Debug.Log($"Player Speed increased by {amount}. New speed: {moveSpeed}");
     }
 
     public void Death()
     {
         if (gameObject != null)
         {
-            gameStateManager.Invoke("ResetGame", 0.1f); // Delay the reset by 0.1 seconds
-            gameStateManager.GameOver();
+            _gameStateManager.Invoke("ResetGame", 0.1f); 
+            _gameStateManager.GameOver();
         }
 
         if (instantiatedHeart != null)

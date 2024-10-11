@@ -13,27 +13,22 @@ public class EnemyManager : MonoBehaviour
 
 
     protected ObjectPool enemyPool;
-
-    // Reference to the player's Animator
-    private Animator playerAnimator;
+    private Animator _playerAnimator;
 
     public int XPValue => xpValue;
 
     protected virtual void Awake()
     {
         enemyPool = FindObjectOfType<ObjectPool>();
-     
-
-        // Assume the player has an Animator component and we get the reference here
         if (Player != null)
         {
-            playerAnimator = Player.GetComponent<Animator>();
+            _playerAnimator = Player.GetComponent<Animator>();
         }
     }
 
     public virtual void Update()
     {
-        // Skip movement logic if paused or if Player is null
+      
         if (Player != null)
         {
             MoveTowardsPlayer();
@@ -49,8 +44,6 @@ public class EnemyManager : MonoBehaviour
         transform.rotation = Quaternion.LookRotation(newDirection);
         transform.position += transform.forward * moveSpeed * Time.deltaTime;
     }
-
-   
 
     public void TakeDamage(int damage)
     {

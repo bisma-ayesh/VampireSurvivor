@@ -2,11 +2,11 @@ using UnityEngine;
 
 public abstract class GameState
 {
-    protected GameStateManager gameStateManager;
+    protected GameStateManager GameStateManager;
 
     public GameState(GameStateManager gameStateManager)
     {
-        this.gameStateManager = gameStateManager;
+        this.GameStateManager = gameStateManager;
     }
 
     public abstract void EnterState();

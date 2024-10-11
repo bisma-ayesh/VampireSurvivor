@@ -2,93 +2,91 @@ using UnityEngine;
 
 public class UpgradeState : GameState
 {
-    private Player player;
-    public GameObject upgradePanelPrefab; // Reference to the upgrade UI prefab
-    private GameObject upgradePanel; // Store a reference to the instantiated panel for cleanup
-    private UpgradeButton panel;
-
-    // References for SpawnManager and SpawnUpgradeData
-    private SpawnManager spawnManager;
-    private SpawnUpgradeData spawnUpgradeData;
+    private Player _player;
+    private GameObject _upgradePanel; 
+    private UpgradeButton _panel;
+    private SpawnManager _spawnManager;
+    private SpawnUpgradeData _spawnUpgradeData;
+    public GameObject upgradePanelPrefab;
 
     public UpgradeState(GameStateManager gameStateManager, Player player, SpawnManager spawnManager, SpawnUpgradeData spawnUpgradeData) : base(gameStateManager)
     {
-        this.player = player;
-        this.spawnManager = spawnManager;
-        this.spawnUpgradeData = spawnUpgradeData;
+        this._player = player;
+        this._spawnManager = spawnManager;
+        this._spawnUpgradeData = spawnUpgradeData;
     }
 
     public override void EnterState()
     {
-        Time.timeScale = 0; // Pause the game
-        upgradePanel = Object.Instantiate(upgradePanelPrefab); // Instantiate the UI
-        panel = upgradePanel.GetComponent<UpgradeButton>();
+        Time.timeScale = 0; 
+        _upgradePanel = Object.Instantiate(upgradePanelPrefab); 
+        _panel = _upgradePanel.GetComponent<UpgradeButton>();
 
-        // Load the Scriptable Objects
+        
         HealthUpgrade healthUpgrade = Resources.Load<HealthUpgrade>("HealthUpgrade");
         SpeedUpgrade speedUpgrade = Resources.Load<SpeedUpgrade>("SpeedUpgrade");
-        spawnUpgradeData = Resources.Load<SpawnUpgradeData>("SpawnUpgradeData"); // Ensure it uses the instance variable
+        _spawnUpgradeData = Resources.Load<SpawnUpgradeData>("SpawnUpgradeData"); 
 
-        // Setup the panel with the upgrade actions and scriptable objects
-        panel.healthUpgrade = healthUpgrade; // Assign the health upgrade
-        panel.speedUpgrade = speedUpgrade; // Assign the speed upgrade
-        panel.Setup(OnHealthUpgradeSelected, OnSpeedUpgradeSelected, gameStateManager); // Set up the panel
+        
+        _panel.healthUpgrade = healthUpgrade; 
+        _panel.speedUpgrade = speedUpgrade; 
+        _panel.Setup(OnHealthUpgradeSelected, OnSpeedUpgradeSelected, GameStateManager); 
     }
 
     public override void UpdateState()
     {
-        // Handle input logic for upgrades within the UpgradeState
+        
         if (Input.GetKeyDown(KeyCode.A))
         {
-            OnHealthUpgradeSelected(panel.healthUpgrade);
+            OnHealthUpgradeSelected(_panel.healthUpgrade);
             UpdateSpawnData();
         }
         else if (Input.GetKeyDown(KeyCode.B))
         {
-            OnSpeedUpgradeSelected(panel.speedUpgrade);
+            OnSpeedUpgradeSelected(_panel.speedUpgrade);
             UpdateSpawnData();
         }
         else if (Input.GetKeyDown(KeyCode.Escape))
         {
-            // Exit to PlayingState without upgrading
+          
             ExitToPlayingState();
         }
     }
 
     private void OnHealthUpgradeSelected(HealthUpgrade healthUpgrade)
     {
-        healthUpgrade.ApplyUpgrade(player);
-        ExitToPlayingState(); // Exit after applying the upgrade
+        healthUpgrade.ApplyUpgrade(_player);
+        ExitToPlayingState(); 
     }
 
     private void OnSpeedUpgradeSelected(SpeedUpgrade speedUpgrade)
     {
-        speedUpgrade.ApplyUpgrade(player);
-        ExitToPlayingState(); // Exit after applying the upgrade
+        speedUpgrade.ApplyUpgrade(_player);
+        ExitToPlayingState();
     }
 
     private void UpdateSpawnData()
     {
-        // Example of modifying the spawn data based on upgrades
-        if (spawnUpgradeData != null)
+       
+        if (_spawnUpgradeData != null)
         {
-            spawnUpgradeData.UpdateSpawndData(spawnManager); // Example upgrade logic
+            _spawnUpgradeData.UpdateSpawndData(_spawnManager);
         }
     }
 
     public override void ExitState()
     {
-        // Cleanup: Destroy the UI
-        if (upgradePanel != null)
+        
+        if (_upgradePanel != null)
         {
-            Object.Destroy(upgradePanel);
+            Object.Destroy(_upgradePanel);
         }
     }
 
     private void ExitToPlayingState()
     {
-        ExitState(); // Call exit state to clean up UI
-        Time.timeScale = 1; // Resume the game time
-        gameStateManager.ChangeState(gameStateManager.playingState); // Change back to the PlayingState
+        ExitState(); 
+        Time.timeScale = 1;
+        GameStateManager.ChangeState(GameStateManager.playingState);
     }
 }

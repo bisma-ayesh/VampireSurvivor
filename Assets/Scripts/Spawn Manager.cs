@@ -3,86 +3,88 @@ using UnityEngine;
 
 public class SpawnManager : MonoBehaviour
 {
-    private Transform[] _spawnPoints; // Array to hold the spawn points
+    private Transform[] _spawnPoints; 
     private ObjectPool _enemyPool;
-    public float spawnInterval = 1.0f; // Reference to the ObjectPool class
-    public int numberOfEnemiesToSpawn; // Number of enemies to spawn
-    public GameObject[] enemyPrefabs; // Array of enemy prefabs to spawn
+    public float spawnInterval = 1.0f; 
+    public int numberOfEnemiesToSpawn; 
+    public GameObject[] enemyPrefabs;
 
     void Start()
     {
         InitializeSpawnManager();
-        Debug.Log("Initial spawn interval: " + spawnInterval); // Log the initial spawn interval
-        InvokeRepeating("SpawnEnemies", 1, spawnInterval); // Start spawning enemies at intervals
+        Debug.Log("Initial spawn interval: " + spawnInterval);
+        InvokeRepeating("SpawnEnemies", 1, spawnInterval);
     }
 
     private void InitializeSpawnManager()
     {
-        _enemyPool = FindObjectOfType<ObjectPool>(); // Find the ObjectPool in the scene
-        int spawnCount = transform.childCount; // Get the number of child objects (spawn points)
-        _spawnPoints = new Transform[spawnCount]; // Initialize the spawn points array
-
+        _enemyPool = FindObjectOfType<ObjectPool>(); 
+        int spawnCount = transform.childCount;
+        _spawnPoints = new Transform[spawnCount];
         for (int i = 0; i < spawnCount; i++)
         {
-            _spawnPoints[i] = transform.GetChild(i); // Fill the spawn points array with the children
+            _spawnPoints[i] = transform.GetChild(i); 
         }
     }
 
     public void SpawnEnemies()
     {
-        List<int> availableSpawnPoints = GetAvailableSpawnPoints(); // Generate a list from the method GetAvailableSpawnPoints
-        for (int i = 0; i < numberOfEnemiesToSpawn; i++) // Use the existing numberOfEnemiesToSpawn variable
+        List<int> availableSpawnPoints = GetAvailableSpawnPoints(); 
+        for (int i = 0; i < numberOfEnemiesToSpawn; i++) 
         {
-            int randomPosition = GetRandomSpawnPoint(availableSpawnPoints);
-            int spawnPosition = availableSpawnPoints[randomPosition];
+            if (availableSpawnPoints.Count == 0) break; 
 
-            int enemyPrefabType = GetRandomEnemyType(); // Which enemy to spawn
+            int randomPositionIndex = GetRandomSpawnPoint(availableSpawnPoints);
+            int spawnPosition = availableSpawnPoints[randomPositionIndex];
 
-            GameObject enemy = _enemyPool.GetEnemy(enemyPrefabs[enemyPrefabType]); // Use the existing enemyPrefabs array
+            int enemyPrefabType = GetRandomEnemyType(); 
 
+            GameObject enemy = _enemyPool.GetEnemy(enemyPrefabs[enemyPrefabType]); 
+
+            
             enemy.transform.position = _spawnPoints[spawnPosition].position;
 
-            availableSpawnPoints.RemoveAt(randomPosition);
+            
+            Rigidbody rb = enemy.GetComponent<Rigidbody>();
+            if (rb == null) 
+            {
+                rb = enemy.AddComponent<Rigidbody>(); 
+            }
+            rb.isKinematic = true; 
+
+            availableSpawnPoints.RemoveAt(randomPositionIndex);
         }
 
-        Debug.Log("Enemies spawned at interval: " + spawnInterval); // Log when enemies spawn
+        Debug.Log("Enemies spawned at interval: " + spawnInterval); 
     }
 
     private List<int> GetAvailableSpawnPoints()
     {
-        List<int> position = new List<int>(); // Empty List to store the spawn points
+        List<int> position = new List<int>(); 
         for (int i = 0; i < _spawnPoints.Length; i++)
         {
-            position.Add(i); // Each position is added into the list
+            position.Add(i); 
         }
-        return position; // Returns available spawn positions 
+        return position; 
     }
 
     private int GetRandomSpawnPoint(List<int> availableSpawnIndices)
     {
-        int randomPosition = Random.Range(0, availableSpawnIndices.Count); // Select a position using random range
-        return randomPosition; // Return it
+        int randomPosition = Random.Range(0, availableSpawnIndices.Count); 
+        return randomPosition; 
     }
 
     private int GetRandomEnemyType()
     {
-        return Random.Range(0, enemyPrefabs.Length); // Return a random enemy prefab index
+        return Random.Range(0, enemyPrefabs.Length); 
     }
 
-    /*public void IncreaseSpawnInterval(float amount)
-    {
-        spawnInterval += amount; // Increase the spawn interval
-        Debug.Log("Spawn interval increased to: " + spawnInterval); // Log the updated spawn interval
-
-        CancelInvoke("SpawnEnemies"); // Cancel the current spawn invocation
-        InvokeRepeating("SpawnEnemies", 1, spawnInterval); // Restart spawning with the new interval
-    }*/
     public void DecreaseSpawnInterval(float amount)
     {
-        spawnInterval = Mathf.Max(0.1f, spawnInterval - amount); // Decrease the spawn interval, ensuring it doesn't go below a threshold
-        Debug.Log("Spawn interval decreased to: " + spawnInterval); // Log the updated spawn interval
+        spawnInterval = Mathf.Max(0.1f, spawnInterval - amount);
+        Debug.Log("Spawn interval decreased to: " + spawnInterval);
 
-        CancelInvoke("SpawnEnemies"); // Cancel the current spawn invocation
-        InvokeRepeating("SpawnEnemies", 1, spawnInterval); // Restart spawning with the new interval
+        CancelInvoke("SpawnEnemies");
+        InvokeRepeating("SpawnEnemies", 1, spawnInterval);
     }
 }
