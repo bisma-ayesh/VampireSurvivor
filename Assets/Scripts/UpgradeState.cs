@@ -27,6 +27,7 @@ public class UpgradeState : GameState
         // Load the Scriptable Objects
         HealthUpgrade healthUpgrade = Resources.Load<HealthUpgrade>("HealthUpgrade");
         SpeedUpgrade speedUpgrade = Resources.Load<SpeedUpgrade>("SpeedUpgrade");
+        spawnUpgradeData = Resources.Load<SpawnUpgradeData>("SpawnUpgradeData"); // Ensure it uses the instance variable
 
         // Setup the panel with the upgrade actions and scriptable objects
         panel.healthUpgrade = healthUpgrade; // Assign the health upgrade
@@ -40,10 +41,12 @@ public class UpgradeState : GameState
         if (Input.GetKeyDown(KeyCode.A))
         {
             OnHealthUpgradeSelected(panel.healthUpgrade);
+            UpdateSpawnData();
         }
         else if (Input.GetKeyDown(KeyCode.B))
         {
             OnSpeedUpgradeSelected(panel.speedUpgrade);
+            UpdateSpawnData();
         }
         else if (Input.GetKeyDown(KeyCode.Escape))
         {
@@ -55,14 +58,12 @@ public class UpgradeState : GameState
     private void OnHealthUpgradeSelected(HealthUpgrade healthUpgrade)
     {
         healthUpgrade.ApplyUpgrade(player);
-        UpdateSpawnData(); // Call to update spawn data if necessary
         ExitToPlayingState(); // Exit after applying the upgrade
     }
 
     private void OnSpeedUpgradeSelected(SpeedUpgrade speedUpgrade)
     {
         speedUpgrade.ApplyUpgrade(player);
-        UpdateSpawnData(); // Call to update spawn data if necessary
         ExitToPlayingState(); // Exit after applying the upgrade
     }
 
@@ -71,8 +72,7 @@ public class UpgradeState : GameState
         // Example of modifying the spawn data based on upgrades
         if (spawnUpgradeData != null)
         {
-            spawnUpgradeData.numberOfEnemiesToSpawn += 200; // Example upgrade logic
-            // You can also add logic to modify enemy prefabs or other properties
+            spawnUpgradeData.UpdateSpawndData(spawnManager); // Example upgrade logic
         }
     }
 

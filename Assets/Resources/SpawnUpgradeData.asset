@@ -12,7 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ba0775f52e85b64a8bf111ee4de8625, type: 3}
   m_Name: SpawnUpgradeData
   m_EditorClassIdentifier: 
-  numberOfEnemiesToSpawn: 5
-  enemyPrefabs:
-  - {fileID: 4948301303654092144, guid: 825a7f969421b844c84bcd318607d44f, type: 3}
-  - {fileID: 6660243240694233448, guid: 621279506d2ce534ab10eaef172ddb5b, type: 3}
+  decreaseSpawnAmount: 32

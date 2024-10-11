@@ -702,6 +702,37 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1432192302}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &451396068
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 451396069}
+  m_Layer: 0
+  m_Name: UpgradeSpawn
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &451396069
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 451396068}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 536.75, y: 128.63849, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &472482476
 GameObject:
   m_ObjectHideFlags: 0
@@ -2495,8 +2526,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 69bde9cfcc8e59943ac1b9b9378d2a70, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spawnUpgradeData: {fileID: 11400000, guid: e3cf869354ba5764a823e3e8be1e707b, type: 2}
   spawnInterval: 1
+  numberOfEnemiesToSpawn: 3
+  enemyPrefabs:
+  - {fileID: 6660243240694233448, guid: 621279506d2ce534ab10eaef172ddb5b, type: 3}
+  - {fileID: 4948301303654092144, guid: 825a7f969421b844c84bcd318607d44f, type: 3}
 --- !u!1 &1512866571
 GameObject:
   m_ObjectHideFlags: 0
@@ -3539,3 +3573,4 @@ SceneRoots:
   - {fileID: 472482479}
   - {fileID: 583257861}
   - {fileID: 727669906}
+  - {fileID: 451396069}

@@ -3,14 +3,16 @@ using UnityEngine;
 
 public class SpawnManager : MonoBehaviour
 {
-    [SerializeField] private SpawnUpgradeData spawnUpgradeData; // Reference to the SpawnUpgradeData
     private Transform[] _spawnPoints; // Array to hold the spawn points
     private ObjectPool _enemyPool;
-    [SerializeField] private float spawnInterval = 1.0f;// Reference to the ObjectPool class
+    public float spawnInterval = 1.0f; // Reference to the ObjectPool class
+    public int numberOfEnemiesToSpawn; // Number of enemies to spawn
+    public GameObject[] enemyPrefabs; // Array of enemy prefabs to spawn
 
     void Start()
     {
         InitializeSpawnManager();
+        Debug.Log("Initial spawn interval: " + spawnInterval); // Log the initial spawn interval
         InvokeRepeating("SpawnEnemies", 1, spawnInterval); // Start spawning enemies at intervals
     }
 
@@ -29,25 +31,21 @@ public class SpawnManager : MonoBehaviour
     public void SpawnEnemies()
     {
         List<int> availableSpawnPoints = GetAvailableSpawnPoints(); // Generate a list from the method GetAvailableSpawnPoints
-
-        for (int i = 0; i < spawnUpgradeData.numberOfEnemiesToSpawn; i++)
+        for (int i = 0; i < numberOfEnemiesToSpawn; i++) // Use the existing numberOfEnemiesToSpawn variable
         {
-            if (availableSpawnPoints.Count == 0) return; // Check if there are any spawn points left in the list
-
-            // A random position is taken from the helper method 
             int randomPosition = GetRandomSpawnPoint(availableSpawnPoints);
-            int spawnPosition = availableSpawnPoints[randomPosition]; // Get the actual spawn point
+            int spawnPosition = availableSpawnPoints[randomPosition];
 
             int enemyPrefabType = GetRandomEnemyType(); // Which enemy to spawn
 
-            // Get an enemy from the pool
-            GameObject enemy = _enemyPool.GetEnemy(spawnUpgradeData.enemyPrefabs[enemyPrefabType]);
+            GameObject enemy = _enemyPool.GetEnemy(enemyPrefabs[enemyPrefabType]); // Use the existing enemyPrefabs array
 
             enemy.transform.position = _spawnPoints[spawnPosition].position;
 
-            // Remove the spawn position so that no other enemies are spawned at this location in this for loop
             availableSpawnPoints.RemoveAt(randomPosition);
         }
+
+        Debug.Log("Enemies spawned at interval: " + spawnInterval); // Log when enemies spawn
     }
 
     private List<int> GetAvailableSpawnPoints()
@@ -68,14 +66,23 @@ public class SpawnManager : MonoBehaviour
 
     private int GetRandomEnemyType()
     {
-        return Random.Range(0, spawnUpgradeData.enemyPrefabs.Length); // Return a random enemy prefab index
+        return Random.Range(0, enemyPrefabs.Length); // Return a random enemy prefab index
     }
-    public void IncreaseSpawnInterval(float amount)
+
+    /*public void IncreaseSpawnInterval(float amount)
     {
         spawnInterval += amount; // Increase the spawn interval
+        Debug.Log("Spawn interval increased to: " + spawnInterval); // Log the updated spawn interval
+
+        CancelInvoke("SpawnEnemies"); // Cancel the current spawn invocation
+        InvokeRepeating("SpawnEnemies", 1, spawnInterval); // Restart spawning with the new interval
+    }*/
+    public void DecreaseSpawnInterval(float amount)
+    {
+        spawnInterval = Mathf.Max(0.1f, spawnInterval - amount); // Decrease the spawn interval, ensuring it doesn't go below a threshold
+        Debug.Log("Spawn interval decreased to: " + spawnInterval); // Log the updated spawn interval
+
         CancelInvoke("SpawnEnemies"); // Cancel the current spawn invocation
         InvokeRepeating("SpawnEnemies", 1, spawnInterval); // Restart spawning with the new interval
     }
 }
-
-

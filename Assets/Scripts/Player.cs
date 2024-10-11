@@ -80,7 +80,6 @@ public class Player : MonoBehaviour
         if (gameObject != null)
         {
             gameStateManager.Invoke("ResetGame", 0.1f); // Delay the reset by 0.1 seconds
-            Destroy(gameObject);
             gameStateManager.GameOver();
         }
 
