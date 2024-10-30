@@ -13,7 +13,6 @@ public class Player : MonoBehaviour
 
     protected int Health;
     protected GameObject instantiatedHeart;
-    protected Vector3 heartOffset = new Vector3(0, 1.0f, 0);
     private GameStateManager _gameStateManager;
   
 
@@ -31,13 +30,13 @@ public class Player : MonoBehaviour
     {
         if (instantiatedHeart != null)
         {
-            instantiatedHeart.transform.position = playerPos.position + heartOffset;
+            instantiatedHeart.transform.position = playerPos.position; 
         }
     }
 
     protected void HeartInstantiate()
     {
-        instantiatedHeart = Instantiate(heartPrefab, playerPos.position + heartOffset, Quaternion.identity);
+        instantiatedHeart = Instantiate(heartPrefab, playerPos.position, Quaternion.identity);
     }
 
     public void OnTriggerEnter(Collider _collision)

@@ -1366,7 +1366,7 @@ MonoBehaviour:
   player: {fileID: 2126726524}
   upgradePanelPrefab: {fileID: 3129117050469033610, guid: e6f833b83d12a7d478edebed80d8465f, type: 3}
   gameOverUI: {fileID: 218126256}
-  spawnUpgradeData: {fileID: 0}
+  spawnUpgradeData: {fileID: 11400000, guid: e3cf869354ba5764a823e3e8be1e707b, type: 2}
 --- !u!1 &690948096
 GameObject:
   m_ObjectHideFlags: 0
@@ -3343,7 +3343,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c8414537a7cefc04d898558b62af8584, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  image: {fileID: 1300332628}
+  _image: {fileID: 1300332628}
 --- !u!114 &2044703248
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3432,11 +3432,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c046a46590370947b3ca23e5c6a9b66, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MoveSpeed: 8
-  MaxHealth: 20
-  PlayerPos: {fileID: 2126726523}
-  HeartPrefab: {fileID: 8469019478163471548, guid: a1c1db43e5583af42955de16dc15a00f, type: 3}
-  Animator: {fileID: 2056876774}
+  moveSpeed: 10
+  maxHealth: 50
+  playerPos: {fileID: 2126726523}
+  heartPrefab: {fileID: 8469019478163471548, guid: a1c1db43e5583af42955de16dc15a00f, type: 3}
+  animator: {fileID: 2056876774}
   healthBar: {fileID: 588643500}
 --- !u!136 &2126726525
 CapsuleCollider:
